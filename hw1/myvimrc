@@ -1,0 +1,35 @@
+" lines starting with a double quote are comments.
+"
+" how to use this file:
+" 1. install this file into the home folder of your CS account.
+" 2. cp myvimrc $HOME/.vimrc
+" 3. use vim wherever you have C source files to edit.
+"
+" what this file does:
+" a. shows line numbering
+" b. fills tab characters with space characters instead
+" c. auto-indents based on input of curly braces
+" d. uses a 4 space per indentation model of block layout
+" e. highlights matching curly braces and brackets
+" f. colors syntax based on C and other language code
+"
+" Note: uncommented, these colorschemes can do things like dark mode:
+" colorscheme desert
+" colorscheme morning
+set number
+syntax on
+" auto indent tabstop=4 fill with spaces
+set autoindent
+set smartindent
+set smarttab
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+" showmatching braces, etc
+set showmatch
+set backspace=indent,eol,start
+set winminheight=0
+set winminwidth=0
+set ruler
+

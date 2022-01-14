@@ -1,0 +1,9 @@
+Courses/CS243/
+├── homeworks
+│   ├── hw1
+│   │   └── mytree.txt
+│   └── hw2
+└── projects
+    └── project1
+
+5 directories, 1 file
