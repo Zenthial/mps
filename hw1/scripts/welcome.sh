@@ -42,7 +42,11 @@ function recursive_directory_print() {
 }
 
 echo "My tmp folder:"
-recursive_directory_print ..
+
+cd ../../
+recursive_directory_print tmp$$
+
+cd tmp$$/Courses
 
 #8
 
