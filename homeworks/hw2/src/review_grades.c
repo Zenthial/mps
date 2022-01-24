@@ -1,9 +1,23 @@
+// 
+// File: review_grades.c
+// Description: Contains the main program entry point, as well as the str_to_int helper function
+// 
+// @author tss2344: Thomas Schollenberger
+// 
+// // // // // // // // // // // // // // // // // // // // // // // //
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
 #include "ctype.h"
+
 #include "stats.h"
 
+/**
+ * @brief Manually converts a string to an int
+ * 
+ * @param str The string to be converted to an int
+ * @return Returns the int within the string, -1 if no int was found, as all ints in this program should be >= 0
+ */
 int str_to_int(char *str[]) {
     int val = 0;
     for (int i = 0; i < (int)strlen(*str); i++) {
@@ -21,6 +35,13 @@ int str_to_int(char *str[]) {
     return val;
 }
 
+/**
+ * @brief Main program entry point
+ * 
+ * @param argc length of argv
+ * @param argv string elements passed to the program
+ * @return int 
+ */
 int main(int argc, char *argv[]) {
     if (argc == 1) {
         fprintf(stderr, "usage: review_grades score1 [score2 ...]\nnote: ignore negative score values");
