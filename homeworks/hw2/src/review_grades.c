@@ -12,6 +12,8 @@
 
 #include "stats.h"
 
+#define ASCII_ZERO 48
+
 /**
  * @brief Manually converts a string to an int
  * 
@@ -24,7 +26,7 @@ int str_to_int(char *str[]) {
         char ch = *str[i];
 
         if (isdigit(ch)) {
-            int ch_val = ch - 48;
+            int ch_val = ch - ASCII_ZERO;
 
             val *= val + ch_val;
         } else {
