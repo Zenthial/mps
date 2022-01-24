@@ -5,10 +5,10 @@
 // @author tss2344: Thomas Schollenberger
 // 
 // // // // // // // // // // // // // // // // // // // // // // // //
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "ctype.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 #include "stats.h"
 
