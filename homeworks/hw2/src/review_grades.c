@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     printf("adjusted population: %d\n", adjusted_population);
     double mean = average(total, scores);
     printf("mean: %f\n", mean);
-    printf("std deviation: %f\n", std_dev(total, scores, mean));
+    printf("std deviation: %g\n", std_dev(total, scores, mean));
     histogram(total, scores);
 
     return EXIT_SUCCESS;
