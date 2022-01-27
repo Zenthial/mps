@@ -46,7 +46,7 @@ int str_to_int(char *str[]) {
  */
 int main(int argc, char *argv[]) {
     if (argc == 1) {
-        fprintf(stderr, "usage: review_grades score1 [score2 ...]\nnote: ignore negative score values.\n");
+        fprintf(stderr, "usage: review_grades score1 [score2 ...]\nnote: ignores negative score values.\n");
         return EXIT_FAILURE;
     }
 
