@@ -46,7 +46,7 @@ int str_to_int(char *str[]) {
  */
 int main(int argc, char *argv[]) {
     if (argc == 1) {
-        fprintf(stderr, "usage: review_grades score1 [score2 ...]\nnote: ignore negative score values");
+        fprintf(stderr, "usage: review_grades score1 [score2 ...]\nnote: ignore negative score values.\n");
         return EXIT_FAILURE;
     }
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     printf("input population: %d\n", input_population);
 
     int total = 0;
-    int scores[20];
+    int scores[100];
 
     for (int i = 1; i < argc; i++) {
         int result = strtoll(argv[i], NULL, 10);
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     printf("adjusted population: %d\n", adjusted_population);
     double mean = average(total, scores);
     printf("mean: %f\n", mean);
-    printf("std: %f\n", std_dev(total, scores, mean));
+    printf("std deviation: %f\n", std_dev(total, scores, mean));
     histogram(total, scores);
 
     return EXIT_SUCCESS;

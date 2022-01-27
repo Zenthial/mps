@@ -5,8 +5,8 @@
 // @author tss2344: Thomas Schollenberger
 // 
 // // // // // // // // // // // // // // // // // // // // // // // //
-#include "math.h"
-#include "stdio.h"
+#include <math.h>
+#include <stdio.h>
 
 /**
  * @brief Computes the average of a set of scores in an int array
@@ -75,9 +75,10 @@ void histogram( int count, const int scores[] ) {
     int grade_limits[] = {92, 89, 85, 82, 79, 75, 72, 69, 60, 0};
     char grade_chars[10][4] = {"A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"};
 
+    const int grade_array_length = 10;
     int grades[10];
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < grade_array_length; i++) {
         grades[i] = 0;
     }
 
@@ -86,7 +87,7 @@ void histogram( int count, const int scores[] ) {
         grades[grade_index] += 1;
     }
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < grade_array_length; i++) {
         int grade_num = grades[i];
 
         printf("%s:\t%d\n", grade_chars[i], grade_num);
