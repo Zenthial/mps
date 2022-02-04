@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
     int scores[100];
 
     for (int i = 1; i < argc; i++) {
-        int result = strtoll(argv[i], NULL, 10);
+        int result = str_to_int(argv[i], NULL, 10);
         
         if (result <= 0) {
             adjusted_population--;

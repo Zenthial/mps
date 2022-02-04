@@ -1,0 +1,108 @@
+make phase1
+gcc -Wno-format -g -ggdb -std=c99 good-life.c -o good-life -lcurses
+tss2344@beatles:~/Courses/CS243/homeworks/hw3/act1$ gdb -q good-life
+Reading symbols from good-life...
+(gdb) run
+Starting program: /home/stu3/s8/tss2344/Courses/CS243/homeworks/hw3/act1/good-life 
+
+	..Welcome to the Game of life..
+
+Please enter the initial number of organisms: 123
+
+Program received signal SIGSEGV, Segmentation fault.
+                                                    __strlen_avx2 () at ../sysdeps/x86_64/multiarch/strlen-avx2.S:65
+65	../sysdeps/x86_64/multiarch/strlen-avx2.S: No such file or directory.
+(gdb) where
+#0  __strlen_avx2 () at ../sysdeps/x86_64/multiarch/strlen-avx2.S:65
+#1  0x00007ffff7db3e95 in __vfprintf_internal (s=s@entry=0x7fffffffe300, 
+    format=format@entry=0x555555556063 "%s", ap=ap@entry=0x7fffffffe4c0, 
+    mode_flags=mode_flags@entry=2) at vfprintf-internal.c:1688
+#2  0x00007ffff7dc711a in __vsnprintf_internal (string=0x555555565e40 "", maxlen=<optimized out>, 
+    format=0x555555556063 "%s", args=0x7fffffffe4c0, mode_flags=2) at vsnprintf.c:114
+#3  0x00007ffff7f73a64 in ?? () from /lib/x86_64-linux-gnu/libncurses.so.6
+#4  0x00007ffff7f6de05 in vwprintw () from /lib/x86_64-linux-gnu/libncurses.so.6
+#5  0x00007ffff7f6deed in printw () from /lib/x86_64-linux-gnu/libncurses.so.6
+#6  0x0000555555555b72 in main () at good-life.c:199
+(gdb) frame 6
+#6  0x0000555555555b72 in main () at good-life.c:199
+199						  printw("%s", life[row][col]);
+(gdb) list
+194				move( 0, 0);
+195					for(row = 0; row<20; row++)
+196			 	{
+197					  for(col = 0; col<20; col++)
+198					  {
+199						  printw("%s", life[row][col]);
+200					  }
+201					  printw( "\n");
+202			 	}
+203				move( 20, 0);
+(gdb) break
+Breakpoint 1 at 0x555555555b72: file good-life.c, line 197.
+(gdb) info break
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000555555555b72 good-life.c:197
+(gdb) break 199
+Breakpoint 2 at 0x555555555b2d: file good-life.c, line 199.
+(gdb) delete breakpoint 1
+(gdb) info break
+Num     Type           Disp Enb Address            What
+2       breakpoint     keep y   0x0000555555555b2d in main at good-life.c:199
+(gdb) 
+run
+The program being debugged has been started already.
+Start it from the beginning? (y or n) y
+Starting program: /home/stu3/s8/tss2344/Courses/CS243/homeworks/hw3/act1/good-life 
+
+	..Welcome to the Game of life..
+
+Please enter the initial number of organisms: 123
+
+Breakpoint 1, main () at good-life.c:199
+199						  printw("%s", life[row][col]);
+(gdb) display row
+1: row = 0
+(gdb) display col
+2: col = 0
+(gdb) whatis life
+type = char [20][20]
+(gdb) display life[row][col]
+3: life[row][col] = 0 '\000'
+(gdb) continue
+Continuing.
+
+Breakpoint 1, main () at good-life.c:199
+199						  printw("%s", life[row][col]);
+1: row = 0
+2: col = 1
+3: life[row][col] = 0 '\000'
+(gdb) continue
+Continuing.
+
+Breakpoint 1, main () at good-life.c:199
+199						  printw("%s", life[row][col]);
+1: row = 0
+2: col = 2
+3: life[row][col] = 0 '\000'
+(gdb) continue
+Continuing.
+
+Breakpoint 1, main () at good-life.c:199
+199						  printw("%s", life[row][col]);
+1: row = 0
+2: col = 3
+3: life[row][col] = 0 '\000'
+(gdb) continue
+Continuing.
+
+Breakpoint 1, main () at good-life.c:199
+199						  printw("%s", life[row][col]);
+1: row = 0
+2: col = 4
+3: life[row][col] = 32 ' '
+(gdb) continue
+Continuing.
+
+Program received signal SIGSEGV, Segmentation fault.
+                                                    __strlen_avx2 () at ../sysdeps/x86_64/multiarch/strlen-avx2.S:65
+65	../sysdeps/x86_64/multiarch/strlen-avx2.S: No such file or directory.
