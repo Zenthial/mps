@@ -107,7 +107,8 @@ int main(int argc, char *argv[]) {
 
     printf("%d %d %d %d\n", endline_num, newline_num, dimension * dimension, delay);
 
-    char **board = create_board(dimension, endline_num, newline_num);
+    char board[MAX_SIZE][MAX_SIZE];
+    create_board(board, dimension, endline_num, newline_num);
 
     return EXIT_SUCCESS;
 }

@@ -1,8 +1,10 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
-void print_board(int size, char **board);
+#define MAX_SIZE 39
 
-char** create_board(int dimension, int end_num, int new_num);
+void print_board(int size, char board[][MAX_SIZE]);
+
+void create_board(char board[][MAX_SIZE], int dimension, int end_num, int new_num);
 
 #endif // !_BOARD_H_
