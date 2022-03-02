@@ -37,7 +37,7 @@ GraphNode * grh_find_node_by_name( ObjectList * graph, char * name ) {
     Iter *iter = ol_iterator(graph);
     while (ol_has_next(iter)) {
         GraphNode *node = (GraphNode *)ol_next(iter);
-        if (node->name == name) {
+        if (strcmp(node->name, name) == 0) {
             return node;
         }
     }
@@ -72,6 +72,7 @@ void grh_print_graph( ObjectList * graph ) {
 
 void grh_load_file( ObjectList * graph, FILE * input ) {
     char buff[MAX_FILE_LINE_LENGTH + 1];
+    const char delim[] = ",";
 
     while (1) {
         char *result = fgets(buff, MAX_FILE_LINE_LENGTH, input);
@@ -91,7 +92,7 @@ void grh_load_file( ObjectList * graph, FILE * input ) {
         }
 
         if (strlen(buff) > 0) {
-            char *start_node_name = strtok(buff, ",");
+            char *start_node_name = strtok(buff, delim);
 
             GraphNode *start_node = grh_find_node_by_name(graph, start_node_name);
 
@@ -101,16 +102,18 @@ void grh_load_file( ObjectList * graph, FILE * input ) {
                 ol_insert(graph, start_node);
             }
 
-            char *neighbor = strtok(buff, ",");
+            char *neighbor = strtok(NULL, ",");
             while (neighbor != NULL) {
                 GraphNode *neighbor_node = grh_find_node_by_name(graph, neighbor);
                 if (neighbor_node == NULL) {
                     neighbor_node = grh_create_node(neighbor);
+                    ol_insert(graph, neighbor_node);
                 }
 
                 ol_insert(start_node->neighbors, neighbor_node);
+                ol_insert(neighbor_node->neighbors, start_node);
 
-                neighbor = strtok(buff, ",");
+                neighbor = strtok(NULL, delim);
             }
         }
     }
