@@ -7,7 +7,7 @@
 
 GraphNode * grh_create_node( char * name ) {
     ObjectList *neighbors = ol_create();
-    GraphNode *node = (GraphNode*)malloc(MAX_NAME * sizeof(char) + sizeof(neighbors));
+    GraphNode *node = (GraphNode *)malloc(sizeof(GraphNode));
     node->neighbors = neighbors;
     strncpy(node->name, name, sizeof(node->name));
 
@@ -31,6 +31,7 @@ void grh_delete_graph( ObjectList * graph ) {
     }
 
     ol_destroy(graph);
+    free(iter);
 }
 
 GraphNode * grh_find_node_by_name( ObjectList * graph, char * name ) {
@@ -38,10 +39,12 @@ GraphNode * grh_find_node_by_name( ObjectList * graph, char * name ) {
     while (ol_has_next(iter)) {
         GraphNode *node = (GraphNode *)ol_next(iter);
         if (strcmp(node->name, name) == 0) {
+            free(iter);
             return node;
         }
     }
 
+    free(iter);
     return NULL;
 }
 
@@ -59,6 +62,8 @@ void grh_print_node(GraphNode *node) {
         }
     }
     printf("\n");
+
+    free(iter);
 }
 
 void grh_print_graph( ObjectList * graph ) {
@@ -68,6 +73,8 @@ void grh_print_graph( ObjectList * graph ) {
         GraphNode *node = (GraphNode *)ol_next(iter);
         grh_print_node(node);
     }
+
+    free(iter);
 }
 
 void grh_load_file( ObjectList * graph, FILE * input ) {
