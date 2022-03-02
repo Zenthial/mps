@@ -1,3 +1,8 @@
+// file: simple_graph.c
+// description: 
+// contains all the graph functions to create, print, and destroy a graph
+// author: tom schollenberger
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,6 +10,7 @@
 #include <object_list.h> 
 #include "simple_graph.h"
 
+/// creates a new graph node
 GraphNode * grh_create_node( char * name ) {
     ObjectList *neighbors = ol_create();
     GraphNode *node = (GraphNode *)malloc(sizeof(GraphNode));
@@ -14,6 +20,7 @@ GraphNode * grh_create_node( char * name ) {
     return node;
 }
 
+/// handles the deletion of a graph node by freeing the node and the objectlist inside the node
 void grh_delete_node( GraphNode * node ) {
     // shouldnt need to cleanup each node in the neighbors because they'll all naturally be cleaned
     // as the entire graph is destroyed
@@ -23,6 +30,7 @@ void grh_delete_node( GraphNode * node ) {
     free(node);
 }
 
+/// helper function to just loop through all the nodes, delete all of them, then destroy the objectlist itself
 void grh_delete_graph( ObjectList * graph ) {
     Iter *iter = ol_iterator(graph);
     while (ol_has_next(iter)) {
@@ -34,6 +42,7 @@ void grh_delete_graph( ObjectList * graph ) {
     free(iter);
 }
 
+/// basic O(N) for loop to find a node, returns NULL if not found
 GraphNode * grh_find_node_by_name( ObjectList * graph, char * name ) {
     Iter *iter = ol_iterator(graph);
     while (ol_has_next(iter)) {
@@ -48,7 +57,8 @@ GraphNode * grh_find_node_by_name( ObjectList * graph, char * name ) {
     return NULL;
 }
 
-// private helper function for printing the graph
+/// private helper function for printing the graph
+/// @param node Takes in a pointer to a graph node
 void grh_print_node(GraphNode *node) {
     Iter *iter = ol_iterator(node->neighbors);
 
@@ -66,6 +76,7 @@ void grh_print_node(GraphNode *node) {
     free(iter);
 }
 
+/// public print graph, which simply loops through and calls the helper print_node function
 void grh_print_graph( ObjectList * graph ) {
     if (ol_get_size(graph) <= 0) {
         return;
@@ -82,6 +93,7 @@ void grh_print_graph( ObjectList * graph ) {
     free(iter);
 }
 
+/// loads the given file into a graph, which in our case is just stdin
 void grh_load_file( ObjectList * graph, FILE * input ) {
     char buff[MAX_FILE_LINE_LENGTH + 1];
     const char delim[] = ",";

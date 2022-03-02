@@ -1,9 +1,15 @@
+// file: build_graph.c
+// description: 
+// makes calls to load, print and destroy the graph
+// author: tom schollenberger
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <object_list.h> 
 #include "simple_graph.h"
 
+// entry point of the program
 int main( void ) {
     ObjectList *graph = ol_create();
     printf("Reading graph data...\n");
