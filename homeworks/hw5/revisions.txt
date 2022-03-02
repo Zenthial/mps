@@ -1,0 +1,144 @@
+commit 5e903e5589a4d8963364543a1a409e4d89f5939d
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Mar 2 15:31:09 2022 -0500
+
+    fix memory leaks
+
+commit 55719fbb05f2c7e5641b4b8dc9fc39cf4409af30
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Mar 2 13:45:58 2022 -0500
+
+    working printout on c1-c4.txt
+
+commit b8d34b2aac3f25e799915a5040fd257eff2cd268
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Mar 2 12:34:55 2022 -0500
+
+    progress
+
+commit dd0885094918a7528bf9085e8fb5d6e4a941d24f
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Feb 25 13:47:56 2022 -0500
+
+    hw5
+
+commit 26b09ccff9f9097ab2b6e10d130492c0fa656e77
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Thu Feb 17 16:40:09 2022 -0500
+
+    hw4
+
+commit f74f69fb2df82f00116a5e567492d36b62b23078
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Feb 9 02:30:54 2022 -0500
+
+    convert from malloc to staticly defined
+
+commit ebec2fb7fe18f2a7a5f2b64d4637535c8685f321
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Feb 9 02:11:06 2022 -0500
+
+    project1
+
+commit bb6dd12c344c365969f8143939eea3d1deaaa1cb
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Thu Feb 3 21:30:12 2022 -0500
+
+    working color
+
+commit 972c3b848a8f18930fa6b76cba97de4b5b9c5890
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Thu Feb 3 20:06:19 2022 -0500
+
+    hw3
+
+commit 01b5b274c71277f190ae43ac2b6d5ddf10b7f6c0
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Jan 26 23:41:01 2022 -0500
+
+    fix typo
+
+commit 7959c0015b7608ceaca810a0a2e32f632f27582b
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Jan 26 23:37:25 2022 -0500
+
+    change %f to %g
+
+commit 4db9a8ec581f297ca698fa73ea2d53a35dbc4414
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Wed Jan 26 21:34:52 2022 -0500
+
+    expand score array, fix typos
+
+commit f3de591764c7344e2a7ac465ff24736f4ea46ac4
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Mon Jan 24 14:46:57 2022 -0500
+
+    make 48 a constant
+
+commit ff9e93a584000ab640fe3b00907eb209cb88da04
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Mon Jan 24 14:39:34 2022 -0500
+
+    add new lines, remove exe
+
+commit 7ada900809c1d8416dd3864da41052d069bcdd7c
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Mon Jan 24 14:36:31 2022 -0500
+
+    update build command and import pathing
+
+commit 48d3cbf85655758da6011b45130cffdb97a27eb5
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Mon Jan 24 14:25:37 2022 -0500
+
+    document hw2 codebase
+
+commit 4fe45becfa669c4d381e4d6c96d5ba78c470fe43
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Thu Jan 20 22:35:05 2022 -0500
+
+    hw2
+
+commit 77f329d6a8d2729359a92cef076b964e69b0c7f7
+Merge: b6288bd 0fdad95
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 21:34:45 2022 -0500
+
+    Merge branch 'main' of https://github.com/Zenthial/mps into main
+
+commit b6288bdd8ed19cd99cd965fdda76de9dc69860e4
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 21:34:43 2022 -0500
+
+    init
+
+commit 8d968b941a4b022f54d949e65bb00742221e01e1
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 21:19:57 2022 -0500
+
+    update welcome script
+
+commit 0fdad9561cb113263d3ddd971752b6626ebb4baf
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 13:03:23 2022 -0500
+
+    add ignore
+
+commit 830226077b878eb19d2808f18042ea9e4211897c
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 13:02:18 2022 -0500
+
+    reorganize 2
+
+commit cab82fef8907294cde93ca47425f29cf5203bbf3
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 01:00:43 2022 -0500
+
+    reorganize
+
+commit b8f44e2c78ba1e31acc621204fac9966da63d713
+Author: Zenthial <iamzenthial@gmail.com>
+Date:   Fri Jan 14 00:57:40 2022 -0500
+
+    initial

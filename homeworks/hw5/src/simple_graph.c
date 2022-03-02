@@ -67,6 +67,11 @@ void grh_print_node(GraphNode *node) {
 }
 
 void grh_print_graph( ObjectList * graph ) {
+    if (ol_get_size(graph) <= 0) {
+        return;
+    }
+    
+    printf("Graph: {name: neighbor names list}\n");
     Iter *iter = ol_iterator(graph);
 
     while (ol_has_next(iter)) {
@@ -117,8 +122,13 @@ void grh_load_file( ObjectList * graph, FILE * input ) {
                     ol_insert(graph, neighbor_node);
                 }
 
-                ol_insert(start_node->neighbors, neighbor_node);
-                ol_insert(neighbor_node->neighbors, start_node);
+                if (grh_find_node_by_name(start_node->neighbors, neighbor) == NULL) {
+                    ol_insert(start_node->neighbors, neighbor_node);
+                }
+
+                if (grh_find_node_by_name(neighbor_node->neighbors, start_node_name) == NULL) {
+                    ol_insert(neighbor_node->neighbors, start_node);
+                }
 
                 neighbor = strtok(NULL, delim);
             }
