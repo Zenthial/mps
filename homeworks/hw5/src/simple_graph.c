@@ -59,7 +59,7 @@ GraphNode * grh_find_node_by_name( ObjectList * graph, char * name ) {
 
 /// private helper function for printing the graph
 /// @param node Takes in a pointer to a graph node
-void grh_print_node(GraphNode *node) {
+void grh_print_node( GraphNode * node ) {
     Iter *iter = ol_iterator(node->neighbors);
 
     printf("%s: ", node->name);
@@ -101,18 +101,16 @@ void grh_load_file( ObjectList * graph, FILE * input ) {
     while (1) {
         char *result = fgets(buff, MAX_FILE_LINE_LENGTH, input);
 
-        if ( result == NULL ) {            // check for input error
-
-            if ( ! feof( stdin ) ) {       // if not end of file
-                printf( "input error\n" );
+        if (result == NULL) {
+            if (!feof(stdin)) {
+                printf("input error\n");
             }
             
-            break;                         // bail out of read loop
-
+            break;
         } else {
-
-            // chop off newline if is it also newline-terminated.
-            if ( buff[strlen(buff)-1] == '\n' ) buff[strlen(buff)-1] = '\0';
+            if (buff[strlen(buff) - 1] == '\n') {
+                buff[strlen(buff) - 1] = '\0';
+            }
         }
 
         if (strlen(buff) > 0) {
