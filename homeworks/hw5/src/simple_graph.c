@@ -1,11 +1,13 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
+#include <object_list.h> 
 #include "simple_graph.h"
 
 GraphNode * grh_create_node( char * name ) {
     ObjectList *neighbors = ol_create();
-    GraphNode *node = malloc(MAX_NAME * sizeof(char) + sizeof(ObjectList));
+    GraphNode *node = (GraphNode*)malloc(MAX_NAME * sizeof(char) + sizeof(neighbors));
     node->neighbors = neighbors;
     strncpy(node->name, name, sizeof(node->name));
 
@@ -68,4 +70,48 @@ void grh_print_graph( ObjectList * graph ) {
     }
 }
 
-void grh_load_file( ObjectList * graph, FILE * input );
+void grh_load_file( ObjectList * graph, FILE * input ) {
+    char buff[MAX_FILE_LINE_LENGTH + 1];
+
+    while (1) {
+        char *result = fgets(buff, MAX_FILE_LINE_LENGTH, input);
+
+        if ( result == NULL ) {            // check for input error
+
+            if ( ! feof( stdin ) ) {       // if not end of file
+                printf( "input error\n" );
+            }
+            
+            break;                         // bail out of read loop
+
+        } else {
+
+            // chop off newline if is it also newline-terminated.
+            if ( buff[strlen(buff)-1] == '\n' ) buff[strlen(buff)-1] = '\0';
+        }
+
+        if (strlen(buff) > 0) {
+            char *start_node_name = strtok(buff, ",");
+
+            GraphNode *start_node = grh_find_node_by_name(graph, start_node_name);
+
+            if (start_node == NULL) {
+                start_node = grh_create_node(start_node_name);
+
+                ol_insert(graph, start_node);
+            }
+
+            char *neighbor = strtok(buff, ",");
+            while (neighbor != NULL) {
+                GraphNode *neighbor_node = grh_find_node_by_name(graph, neighbor);
+                if (neighbor_node == NULL) {
+                    neighbor_node = grh_create_node(neighbor);
+                }
+
+                ol_insert(start_node->neighbors, neighbor_node);
+
+                neighbor = strtok(buff, ",");
+            }
+        }
+    }
+}
