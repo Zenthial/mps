@@ -102,10 +102,10 @@ void grh_load_file( ObjectList * graph, FILE * input ) {
         char *result = fgets(buff, MAX_FILE_LINE_LENGTH, input);
 
         if (result == NULL) {
-            if (!feof(stdin)) {
-                printf("input error\n");
+            if (!feof(input)) {
+                exit(EXIT_FAILURE);
             }
-            
+
             break;
         } else {
             if (buff[strlen(buff) - 1] == '\n') {
@@ -124,7 +124,7 @@ void grh_load_file( ObjectList * graph, FILE * input ) {
                 ol_insert(graph, start_node);
             }
 
-            char *neighbor = strtok(NULL, ",");
+            char *neighbor = strtok(NULL, delim);
             while (neighbor != NULL) {
                 GraphNode *neighbor_node = grh_find_node_by_name(graph, neighbor);
                 if (neighbor_node == NULL) {
