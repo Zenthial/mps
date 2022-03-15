@@ -1,18 +1,22 @@
+// file: build_graph.c
+// description: 
+// makes calls to load, print and destroy the graph
+// author: tom schollenberger
+
 #include <stdio.h>
 #include <stdlib.h>
 
-// #include "simple_graph.h"
+#include <object_list.h> 
+#include "simple_graph.h"
 
-int main(void) {
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t lineSize = 0;
-
-    lineSize = getline(&line, &len, stdin);
-
-    printf("You entered %s, which has %zu chars.\n", line, lineSize - 1);
-
-    free(line);
+// entry point of the program
+int main( void ) {
+    ObjectList *graph = ol_create();
+    printf("Reading graph data...\n");
+    grh_load_file(graph, stdin);
+    printf("Finished reading graph data.\n");
+    grh_print_graph(graph);
+    grh_delete_graph(graph);
 
     return EXIT_SUCCESS;
 }
