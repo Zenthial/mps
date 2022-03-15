@@ -40,7 +40,7 @@ typedef struct queueADT {
 } QueueADT_T;
 
 // creates a queue, with an optional comparison function
-QueueADT que_create( int (*cmp)(const void * a, const void * b) ) {
+QueueADT que_create(int (*cmp)(const void * a, const void * b)) {
     QueueADT_T *queue = (QueueADT_T *)malloc(sizeof(struct queueADT));
     queue->first = NULL;
     queue->last = NULL;
@@ -54,7 +54,7 @@ QueueADT que_create( int (*cmp)(const void * a, const void * b) ) {
 }
 
 // clears a queue without freeing the queue itself
-void que_clear( QueueADT queue ) {
+void que_clear(QueueADT queue) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     if (qADT->numNodes > 0) {
         QueueNode *next = qADT->first;
@@ -70,7 +70,7 @@ void que_clear( QueueADT queue ) {
 }
 
 // simply clears the nodes inside the queue then frees the queue pointer
-void que_destroy( QueueADT queue ) {
+void que_destroy(QueueADT queue) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     que_clear(queue);
 
@@ -95,7 +95,7 @@ void swap(QueueNode *a, QueueNode *b) {
  * @param head The head node of a linked list
  * @param comparison The comparsion function to sort with
  */
-void bubbleSort(QueueNode *head, cmp comparison) {
+void bubble_sort(QueueNode *head, cmp comparison) {
     bool swapped = false;
 
     if (head == NULL)
@@ -117,6 +117,83 @@ void bubbleSort(QueueNode *head, cmp comparison) {
     while (swapped);
 }
 
+QueueNode *getTail(QueueNode *cur) {
+    while (cur != NULL && cur->previous != NULL) {
+        cur = cur->previous;
+    }
+
+    return cur;
+}
+  
+
+QueueNode *partition(QueueNode *head, QueueNode *end, QueueNode *newHead, QueueNode *newEnd, cmp comparison) {
+    QueueNode *pivot = end;
+    QueueNode *prev = NULL, *cur = head, *tail = pivot;
+  
+    while (cur != pivot) {
+        if (comparison(cur->val, pivot->val) > 0) {
+            if (newHead == NULL) {
+                newHead = cur;
+            }
+
+            prev = cur;
+            cur = cur->previous;
+        } else {
+
+            if (prev) {
+                prev->next = cur->previous;
+            }
+
+            QueueNode *tmp = cur->previous;
+            cur->previous = NULL;
+            tail->next = cur;
+            tail = cur;
+            cur = tmp;
+        }
+    }
+  
+    if (newHead == NULL) {
+        newHead = pivot;
+    }
+
+    newEnd = tail;
+  
+    return pivot;
+}
+  
+
+QueueNode *sort_recursion(QueueNode *head, QueueNode *end, cmp comparison) {
+    // Base condition
+    if (!head || head == end)
+        return head;
+  
+    QueueNode *newHead = NULL, *newEnd = NULL;
+  
+
+    QueueNode *pivot = partition(head, end, &newHead, &newEnd, comparison);
+    if (newHead != pivot) {
+
+        QueueNode *tmp = newHead;
+        while (tmp->next != pivot)
+            tmp = tmp->next;
+        tmp->next = NULL;
+  
+
+        newHead = sort_recursion(newHead, tmp, comparison);
+  
+        tmp = getTail(newHead);
+        tmp->next = pivot;
+    }
+  
+    pivot->next = sort_recursion(pivot->next, newEnd, comparison);
+  
+    return newHead;
+}
+  
+void quick_sort(QueueNode *head, cmp comparison) {
+    head = sort_recursion(head, getTail(head), comparison);
+}
+
 /**
  * @brief Creates a node object
  * 
@@ -133,7 +210,7 @@ QueueNode *create_node(void * data) {
 }
 
 // inserts a node into the queue
-void que_insert( QueueADT queue, void * data ) {
+void que_insert(QueueADT queue, void * data) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     QueueNode *nodeToAdd = create_node(data);
 
@@ -155,12 +232,12 @@ void que_insert( QueueADT queue, void * data ) {
     qADT->numNodes++;
 
     if(qADT->comparison != NULL) {
-        bubbleSort(qADT->first, qADT->comparison);
+        quick_sort(qADT->first, qADT->comparison);
     }
 }
 
 // removes the oldest node from the queue if no comparison function, else removes the first
-void *que_remove( QueueADT queue ) {
+void *que_remove(QueueADT queue) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
 
     assert(qADT->numNodes != 0);
@@ -184,7 +261,7 @@ void *que_remove( QueueADT queue ) {
 }
 
 // checks if the queue is empty
-bool que_empty( QueueADT queue ) {
+bool que_empty(QueueADT queue) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     return qADT->numNodes == 0;
 }
