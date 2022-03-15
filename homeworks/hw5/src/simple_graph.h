@@ -9,7 +9,7 @@
 #define SIMPLE_GRAPH_
 
 #include <stdio.h>                      // FILE
-#include <object_list.h>                // linked list utility module
+#include "object_list.h"               // linked list utility module
 
 #define MAX_NAME  100                   /// maximum length of a node name
 
