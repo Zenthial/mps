@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
-#include "QueueADT.h"
 
 /// the type definition of the comparison function
 /// takes two void pointers, which are the pointers to be compared
@@ -32,16 +31,22 @@ typedef struct queueNode {
  * tracks the number of nodes in the queue
  * has an optional comparison function pointer
  */
-typedef struct queueADT {
+struct queueADT {
     QueueNode *first;
     QueueNode *last;
     int numNodes;
     cmp comparison;
-} QueueADT_T;
+};
+
+typedef struct queueADT *QueueADT;
+
+#define _QUEUE_IMPL_
+#include "QueueADT.h"
+
 
 // creates a queue, with an optional comparison function
 QueueADT que_create(int (*cmp)(const void * a, const void * b)) {
-    QueueADT_T *queue = (QueueADT_T *)malloc(sizeof(struct queueADT));
+    QueueADT queue = (QueueADT)malloc(sizeof(struct queueADT));
     queue->first = NULL;
     queue->last = NULL;
     queue->numNodes = 0;
@@ -55,7 +60,7 @@ QueueADT que_create(int (*cmp)(const void * a, const void * b)) {
 
 // clears a queue without freeing the queue itself
 void que_clear(QueueADT queue) {
-    QueueADT_T *qADT = (QueueADT_T *)queue;
+    QueueADT qADT = (QueueADT )queue;
     if (qADT->numNodes > 0) {
         QueueNode *next = qADT->first;
         while (next != NULL) {
@@ -71,7 +76,7 @@ void que_clear(QueueADT queue) {
 
 // simply clears the nodes inside the queue then frees the queue pointer
 void que_destroy(QueueADT queue) {
-    QueueADT_T *qADT = (QueueADT_T *)queue;
+    QueueADT qADT = (QueueADT )queue;
     que_clear(queue);
 
     free(qADT);
@@ -134,7 +139,7 @@ QueueNode *create_node(void * data) {
 
 // inserts a node into the queue
 void que_insert(QueueADT queue, void * data) {
-    QueueADT_T *qADT = (QueueADT_T *)queue;
+    QueueADT qADT = (QueueADT )queue;
     QueueNode *nodeToAdd = create_node(data);
 
     // this ensures that qADT->first also is not NULL
@@ -161,7 +166,7 @@ void que_insert(QueueADT queue, void * data) {
 
 // removes the oldest node from the queue if no comparison function, else removes the first
 void *que_remove(QueueADT queue) {
-    QueueADT_T *qADT = (QueueADT_T *)queue;
+    QueueADT qADT = (QueueADT )queue;
 
     assert(qADT->numNodes != 0);
     if (qADT->comparison == NULL) {
@@ -185,6 +190,6 @@ void *que_remove(QueueADT queue) {
 
 // checks if the queue is empty
 bool que_empty(QueueADT queue) {
-    QueueADT_T *qADT = (QueueADT_T *)queue;
+    QueueADT qADT = (QueueADT )queue;
     return qADT->numNodes == 0;
 }
