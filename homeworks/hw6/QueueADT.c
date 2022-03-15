@@ -1,30 +1,34 @@
 /// QueueADT implementation file
+/// description: implements the full ADT methods defined in QueueADT.h
+/// provides all necessary queue functionality
+/// user: tss2344
 /// author: Tom Schollenberger
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <assert.h>
 #include "QueueADT.h"
 
 typedef int (*cmp)(const void * a, const void * b);
 
-struct queueNode {
+typedef struct queueNode {
     void *val;
-    struct queueNode *prev;
     struct queueNode *next;
-};
+    struct queueNode *previous;
+} QueueNode;
 
-struct queueADT {
-    struct queueNode *newest;
-    struct queueNode *oldest;
+typedef struct queueADT {
+    QueueNode *first;
+    QueueNode *last;
     int numNodes;
     cmp comparison;
-};
+} QueueADT_T;
 
 QueueADT que_create( int (*cmp)(const void * a, const void * b) ) {
-    struct queueADT *queue = (struct queueADT *)malloc(sizeof(struct queueADT));
-    queue->newest = NULL;
-    queue->oldest = NULL;
+    QueueADT_T *queue = (QueueADT_T *)malloc(sizeof(struct queueADT));
+    queue->first = NULL;
+    queue->last = NULL;
     queue->numNodes = 0;
     queue->comparison = NULL;
     if (cmp != NULL) {
@@ -35,83 +39,121 @@ QueueADT que_create( int (*cmp)(const void * a, const void * b) ) {
 }
 
 void que_destroy( QueueADT queue ) {
-    struct queueADT *qADT = (struct queueADT *)queue;
-    struct queueNode *next = qADT->oldest;
-    while (next != NULL) {
-        struct queueNode *temp = next->next;
-        free(next);
-        next = temp;
+    QueueADT_T *qADT = (QueueADT_T *)queue;
+    if (qADT->numNodes > 0) {
+        QueueNode *next = qADT->first;
+        while (next != NULL) {
+            QueueNode *temp = next->previous;
+            free(next);
+            next = temp;
+        }
     }
-
+    
     free(qADT);
 }
 
 void que_clear( QueueADT queue ) {
-    struct queueADT *qADT = (struct queueADT *)queue;
-    struct queueNode *next = qADT->oldest;
-    while (next != NULL) {
-        struct queueNode *temp = next->next;
-        free(next);
-        next = temp;
+    QueueADT_T *qADT = (QueueADT_T *)queue;
+    if (qADT->numNodes > 0) {
+        QueueNode *next = qADT->first;
+        while (next != NULL) {
+            QueueNode *temp = next->previous;
+            free(next);
+            next = temp;
+        }
     }
 
+    qADT->comparison = NULL;
     qADT->numNodes = 0;
 }
 
-struct queueNode *create_node(void * data, struct queueNode * prevNode) {
-    struct queueNode *node = (struct queueNode *) malloc(sizeof(struct queueNode));
+void swap(QueueNode *a, QueueNode *b) {
+    void *temp = a->val;
+    a->val = b->val;
+    b->val = temp;
+}
+
+void bubbleSort(QueueNode *head, cmp comparison) {
+    bool swapped = false;
+
+    if (head == NULL)
+        return;
+  
+    do {
+        swapped = false;
+        QueueNode *pointer = head;
+  
+        while (pointer != NULL && pointer->previous != NULL) {
+            if (comparison(pointer->val, pointer->previous->val) > 0) { 
+                swap(pointer, pointer->previous);
+                swapped = true;
+            }
+
+            pointer = pointer->previous;
+        }
+    }
+    while (swapped);
+}
+
+QueueNode *create_node(void * data) {
+    QueueNode *node = (QueueNode *) malloc(sizeof(QueueNode));
     node->val = data;
-    node->prev = prevNode;
     node->next = NULL;
+    node->previous = NULL;
 
     return(node);
 }
 
 void que_insert( QueueADT queue, void * data ) {
-    struct queueADT *qADT = (struct queueADT *)queue;
-    struct queueNode *node = create_node(data, qADT->newest);
-    if (qADT->comparison == NULL || (qADT->newest == NULL && qADT->comparison != NULL)) {
-        qADT->newest->next = node;
-        qADT->newest = node;
+    QueueADT_T *qADT = (QueueADT_T *)queue;
+    QueueNode *nodeToAdd = create_node(data);
+
+    // this ensures that qADT->first also is not NULL
+    // if it was NULL, then last would have to be NULL
+    // if last isn't NULL, that means there is at least one value in the queue
+    if (qADT->last == NULL) {
+        qADT->last = nodeToAdd;
+        qADT->first = nodeToAdd;
         qADT->numNodes++;
-    } else {
-        struct queueNode *prev = NULL;
-        struct queueNode *current = qADT->newest;
-        bool found = false;
-        while (current != NULL) {
-            struct queueNode *next = current->next;
-            int result = qADT->comparison(current->val, node->val);
-            if (result < 0) {
-                current->next = node;
-                next->prev = node;
+        return;
+    }
 
-                found = true;
-                break;
-            } else {
-                current = next;
-                prev = current;
-            }
+    QueueNode *oldFirst = qADT->first;
+    oldFirst->next = nodeToAdd;
+    nodeToAdd->previous = oldFirst;
+    qADT->first = nodeToAdd;
 
-        }
+    qADT->numNodes++;
 
-        if (found == false) {
-            qADT->oldest = node;
-            node->prev = prev;
-        }
+    if(qADT->comparison != NULL) {
+        bubbleSort(qADT->first, qADT->comparison);
     }
 }
 
 void *que_remove( QueueADT queue ) {
-    struct queueADT *qADT = (struct queueADT *)queue;
-    assert(qADT->numNodes == 0);
-    struct queueNode *oldest = qADT->oldest;
-    void *retVal = oldest->val;
-    qADT->oldest = oldest->next;
-    free(oldest);
-    return(retVal);
+    QueueADT_T *qADT = (QueueADT_T *)queue;
+    // printf("num left: %d\n", qADT->numNodes);
+    assert(qADT->numNodes != 0);
+    if (qADT->comparison == NULL) {
+        QueueNode *last = qADT->last;
+        void *retVal = last->val;
+        qADT->last = last->next;
+        qADT->numNodes--;
+        free(last);
+
+        return retVal;
+    } else {
+        QueueNode *first = qADT->first;
+        void *retVal = first->val;
+        qADT->first = first->previous;
+        qADT->numNodes--;
+        free(first);
+
+        return retVal;
+    }
 }
 
 bool que_empty( QueueADT queue ) {
-    struct queueADT *qADT = (struct queueADT *)queue;
-    return(qADT->numNodes == 0);
+    QueueADT_T *qADT = (QueueADT_T *)queue;
+    return qADT->numNodes == 0;
 }
