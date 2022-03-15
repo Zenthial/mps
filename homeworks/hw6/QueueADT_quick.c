@@ -77,44 +77,81 @@ void que_destroy(QueueADT queue) {
     free(qADT);
 }
 
-/**
- * @brief Swaps two node's values in a linked list
- * 
- * @param a The first node to swap
- * @param b The second node to swap
- */
-void swap(QueueNode *a, QueueNode *b) {
-    void *temp = a->val;
-    a->val = b->val;
-    b->val = temp;
+QueueNode *getTail(QueueNode *cur) {
+    while (cur != NULL && cur->previous != NULL) {
+        cur = cur->previous;
+    }
+
+    return cur;
 }
-
-/**
- * @brief BubbleSort's a linked list
- * 
- * @param head The head node of a linked list
- * @param comparison The comparsion function to sort with
- */
-void bubble_sort(QueueNode *head, cmp comparison) {
-    bool swapped = false;
-
-    if (head == NULL)
-        return;
   
-    do {
-        swapped = false;
-        QueueNode *pointer = head;
+
+QueueNode *partition(QueueNode *head, QueueNode *end, QueueNode **newHead, QueueNode **newEnd, cmp comparison) {
+    QueueNode *pivot = end;
+    QueueNode *prev = NULL, *cur = head, *tail = pivot;
   
-        while (pointer != NULL && pointer->previous != NULL) {
-            if (comparison(pointer->val, pointer->previous->val) > 0) { 
-                swap(pointer, pointer->previous);
-                swapped = true;
+    while (cur != pivot) {
+        if (comparison(cur->val, pivot->val) < 0) {
+            if (*newHead == NULL) {
+               *newHead = cur;
             }
 
-            pointer = pointer->previous;
+            prev = cur;
+            cur = cur->previous;
+        } else {
+
+            if (prev) {
+                prev->previous = cur->previous;
+            }
+
+            QueueNode *tmp = cur->previous;
+            cur->previous = NULL;
+            tail->previous = cur;
+            tail = cur;
+            cur = tmp;
         }
     }
-    while (swapped);
+  
+    if (*newHead == NULL) {
+        *newHead = pivot;
+    }
+
+    *newEnd = tail;
+  
+    return pivot;
+}
+  
+
+QueueNode *sort_recursion(QueueNode *head, QueueNode *end, cmp comparison) {
+    // Base condition
+    if (!head || head == end)
+        return head;
+  
+    QueueNode *newHead = NULL, *newEnd = NULL;
+  
+
+    QueueNode *pivot = partition(head, end, &newHead, &newEnd, comparison);
+    if (newHead != pivot) {
+
+        QueueNode *tmp = newHead;
+        while (tmp->previous != pivot)
+            tmp = tmp->previous;
+        tmp->previous = NULL;
+  
+
+        newHead = sort_recursion(newHead, tmp, comparison);
+  
+        tmp = getTail(newHead);
+        tmp->previous = pivot;
+    }
+
+    pivot->previous = sort_recursion(pivot->previous, newEnd, comparison);
+  
+    return newHead;
+}
+  
+QueueNode *quick_sort(QueueNode *head, cmp comparison) {
+    return sort_recursion(head, getTail(head), comparison);
 }
 
 /**
@@ -155,7 +192,7 @@ void que_insert(QueueADT queue, void * data) {
     qADT->numNodes++;
 
     if(qADT->comparison != NULL) {
-        bubble_sort(qADT->first, qADT->comparison);
+        qADT->first = quick_sort(qADT->first, qADT->comparison);
     }
 }
 
