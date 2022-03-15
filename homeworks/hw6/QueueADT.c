@@ -1,5 +1,6 @@
 /// QueueADT implementation file
 /// description: implements the full ADT methods defined in QueueADT.h
+/// also contains helper functions to sort and to create linked list nodes
 /// provides all necessary queue functionality
 /// user: tss2344
 /// author: Tom Schollenberger
@@ -10,14 +11,28 @@
 #include <assert.h>
 #include "QueueADT.h"
 
+/// the type definition of the comparison function
+/// takes two void pointers, which are the pointers to be compared
 typedef int (*cmp)(const void * a, const void * b);
 
+/**
+ * @brief internal definition of a node within the queue
+ * val is a void pointer to any 64 bit value that the node contains
+ * next is the node before it, while previous is the node after it.
+ * its a bit confusing, appologies
+ */
 typedef struct queueNode {
     void *val;
     struct queueNode *next;
     struct queueNode *previous;
 } QueueNode;
 
+/**
+ * @brief internal definition of the Queue
+ * has a pointer to both the first and last node within the queue
+ * tracks the number of nodes in the queue
+ * has an optional comparison function pointer
+ */
 typedef struct queueADT {
     QueueNode *first;
     QueueNode *last;
@@ -25,6 +40,7 @@ typedef struct queueADT {
     cmp comparison;
 } QueueADT_T;
 
+// creates a queue, with an optional comparison function
 QueueADT que_create( int (*cmp)(const void * a, const void * b) ) {
     QueueADT_T *queue = (QueueADT_T *)malloc(sizeof(struct queueADT));
     queue->first = NULL;
@@ -38,20 +54,7 @@ QueueADT que_create( int (*cmp)(const void * a, const void * b) ) {
     return (QueueADT)queue;
 }
 
-void que_destroy( QueueADT queue ) {
-    QueueADT_T *qADT = (QueueADT_T *)queue;
-    if (qADT->numNodes > 0) {
-        QueueNode *next = qADT->first;
-        while (next != NULL) {
-            QueueNode *temp = next->previous;
-            free(next);
-            next = temp;
-        }
-    }
-    
-    free(qADT);
-}
-
+// clears a queue without freeing the queue itself
 void que_clear( QueueADT queue ) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     if (qADT->numNodes > 0) {
@@ -67,12 +70,32 @@ void que_clear( QueueADT queue ) {
     qADT->numNodes = 0;
 }
 
+// simply clears the nodes inside the queue then frees the queue pointer
+void que_destroy( QueueADT queue ) {
+    QueueADT_T *qADT = (QueueADT_T *)queue;
+    que_clear(queue);
+
+    free(qADT);
+}
+
+/**
+ * @brief Swaps two node's values in a linked list
+ * 
+ * @param a The first node to swap
+ * @param b The second node to swap
+ */
 void swap(QueueNode *a, QueueNode *b) {
     void *temp = a->val;
     a->val = b->val;
     b->val = temp;
 }
 
+/**
+ * @brief BubbleSort's a linked list
+ * 
+ * @param head The head node of a linked list
+ * @param comparison The comparsion function to sort with
+ */
 void bubbleSort(QueueNode *head, cmp comparison) {
     bool swapped = false;
 
@@ -95,6 +118,12 @@ void bubbleSort(QueueNode *head, cmp comparison) {
     while (swapped);
 }
 
+/**
+ * @brief Creates a node object
+ * 
+ * @param data pointer to the data the node should hold
+ * @return QueueNode* 
+ */
 QueueNode *create_node(void * data) {
     QueueNode *node = (QueueNode *) malloc(sizeof(QueueNode));
     node->val = data;
@@ -104,6 +133,7 @@ QueueNode *create_node(void * data) {
     return(node);
 }
 
+// inserts a node into the queue
 void que_insert( QueueADT queue, void * data ) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     QueueNode *nodeToAdd = create_node(data);
@@ -130,6 +160,7 @@ void que_insert( QueueADT queue, void * data ) {
     }
 }
 
+// removes the oldest node from the queue if no comparison function, else removes the first
 void *que_remove( QueueADT queue ) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     // printf("num left: %d\n", qADT->numNodes);
@@ -153,6 +184,7 @@ void *que_remove( QueueADT queue ) {
     }
 }
 
+// checks if the queue is empty
 bool que_empty( QueueADT queue ) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
     return qADT->numNodes == 0;
