@@ -162,7 +162,7 @@ void que_insert( QueueADT queue, void * data ) {
 // removes the oldest node from the queue if no comparison function, else removes the first
 void *que_remove( QueueADT queue ) {
     QueueADT_T *qADT = (QueueADT_T *)queue;
-    // printf("num left: %d\n", qADT->numNodes);
+
     assert(qADT->numNodes != 0);
     if (qADT->comparison == NULL) {
         QueueNode *last = qADT->last;
