@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "board.h"
+#include "QueueADT.h"
 
 Board *board_create(FILE *input) {
     int default_size = 20;
 
     Board *board = (Board *)malloc(sizeof(Board));
-    board->arr = (Vertex *)malloc(sizeof(Vertex) * default_size);
+    board->arr = (char *)malloc(sizeof(char) * default_size);
     board->size = default_size;
     board->indexes = 0;
     board->columns = 0;
@@ -26,18 +27,46 @@ Board *board_create(FILE *input) {
             continue;
         }
 
-        Vertex vert = {chr, 0};
-        board->arr[board->indexes] = vert;
+        board->arr[board->indexes] = chr;
         board->indexes++;
 
         if (board->indexes == board->size - 1) {
-            Vertex *arr = (Vertex *)realloc(board->arr, board->size * 2);
+            char *arr = (char *)realloc(board->arr, board->size * 2);
             board->size *= 2;
             board->arr = arr;
         }
     }
 
     return board;
+}
+
+QueueADT board_get_neighbors(Board *board, int r, int c) {
+    int possible_neighbors[8][2] = {
+        {r + 1, c}, {r - 1, c}, {r - 1, c - 1}, {r + 1, c + 1},
+        {r + 1, c - 1}, {r - 1, c + 1}, {r, c - 1}, {r, c + 1}
+    };
+
+    QueueADT neighbors_queue = que_create(NULL);
+
+    for (int i = 0; i < 8; i++) {
+        int x, y;
+        x = possible_neighbors[i][0];
+        y = possible_neighbors[i][1];
+
+        int index = linearized_2d_cords(x, y, board->columns);
+        if (x >= 0 && y >= 0) {
+            if (board->arr[index] == '0') {
+                Point *point = (Point *)malloc(sizeof(Point));
+                point->x = x;
+                point->y = y;
+                printf("inserted from x: %d, y: %d\n", x, y);
+                que_insert(neighbors_queue, point);
+            }
+        }
+        
+    }
+
+    return neighbors_queue;
 }
 
 /// converts a 2d pair of ints to a 1d int
@@ -47,20 +76,17 @@ int linearized_2d_cords(int r, int c, int cols) {
 
 char board_get(Board *board, int r, int c) {
     int index = linearized_2d_cords(r, c, board->columns);
-    return board->arr[index].val;
+    return board->arr[index];
 }
 
 void board_put(Board *board, int r, int c, char chr) {
     int index = linearized_2d_cords(r, c, board->columns);
-    board->arr[index].val = chr;
+    board->arr[index] = chr;
 }
 
-void board_set_visited(Board *board, int r, int c) {
-    int index = linearized_2d_cords(r, c, board->columns);
-    board->arr[index].visited = 1;
+void board_set_path(Board *board, int index) {
+    board->arr[index] = '2';
 }
-
-void board_set_path(Board *board, int r, int c);
 
 void board_delete(Board *board) {
     free(board->arr);
@@ -78,14 +104,17 @@ void print_details(int row_size) {
 }
 
 void board_print(Board *board) {
-    print_details(board->indexes / board->columns);
+    int rows = board->indexes / board->columns;
+    int row_counter = 0;
+    print_details(rows);
     for (int i = 0; i < board->indexes; i++) {
-        if (i % board->columns == 0 && i != 0) {
-            printf("|");
-        } else if (i == 0) {
+        if (i == 0) {
             printf(" ");
+        } else if (row_counter == 0) {
+            printf("|");
         }
-        char point = board->arr[i].val;
+
+        char point = board->arr[i];
         if (point == '0') {
             point = '.';
         } else if (point == '1') {
@@ -94,11 +123,17 @@ void board_print(Board *board) {
             point = '+';
         }
         printf(" %c", point);
-        if (i % board->columns == board->columns - 1 && i != board->indexes-1) {
-            printf(" |\n");
-        } else if (i == board->indexes - 1) {
+
+        if (i == board->indexes - 1) {
             printf(" \n");
+        } else if (row_counter == rows - 1) {
+            printf(" |\n");
+        }
+
+        row_counter++;
+        if (row_counter >= rows) {
+            row_counter = 0;
         }
     }
-    print_details(board->indexes / board->columns);
+    print_details(rows);
 }

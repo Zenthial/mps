@@ -182,6 +182,10 @@ void *que_remove(QueueADT queue) {
     }
 }
 
+int que_size(QueueADT queue) {
+    return queue->numNodes;
+}
+
 // checks if the queue is empty
 bool que_empty(QueueADT queue) {
     return queue->numNodes == 0;

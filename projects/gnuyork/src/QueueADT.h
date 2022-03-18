@@ -62,6 +62,8 @@ void que_destroy( QueueADT queue );
 
 void que_clear( QueueADT queue );
 
+int que_size( QueueADT queue );
+
 
 /// Insert the specified data into the Queue in the appropriate place
 ///
