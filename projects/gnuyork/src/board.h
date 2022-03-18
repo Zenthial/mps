@@ -1,14 +1,21 @@
 #include <stdio.h>
+#include <stdint.h>
 
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
-#ifndef _BOARD_INCLUDE_
-#define _BOARD_INCLUDE_
+typedef struct vertex {
+    char val;
+    int8_t visited;
+} Vertex;
 
-typedef struct board_ Board;
+typedef struct board{
+    Vertex *arr;
+    int size;
+    int indexes;
+    int columns;
 
-#endif // !_BOARD_INCLUDE_
+} Board;
 
 Board *board_create(FILE *input);
 
@@ -19,5 +26,12 @@ void board_put(Board *board, int r, int c, char chr);
 void board_delete(Board *board);
 
 void board_print(Board *board);
+
+/// takes in a row and a column and coverts it to a singular int
+/// maps a 2d coord to a 1d index
+/// @param r the int of the row to look at
+/// @param c the int of the column to look at
+/// @param cols the total columns within the board
+int linearized_2d_cords(int r, int c, int cols);
 
 #endif // !_BOARD_H_
