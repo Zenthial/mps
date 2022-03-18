@@ -31,14 +31,13 @@ typedef struct queueNode {
  * tracks the number of nodes in the queue
  * has an optional comparison function pointer
  */
-struct queueADT {
+
+typedef struct queueADT {
     QueueNode *first;
     QueueNode *last;
     int numNodes;
     cmp comparison;
-};
-
-typedef struct queueADT *QueueADT;
+} * QueueADT;
 
 #define _QUEUE_IMPL_
 #include "QueueADT.h"
@@ -55,14 +54,13 @@ QueueADT que_create(int (*cmp)(const void * a, const void * b)) {
         queue->comparison = cmp;
     }
 
-    return (QueueADT)queue;
+    return queue;
 }
 
 // clears a queue without freeing the queue itself
 void que_clear(QueueADT queue) {
-    QueueADT qADT = (QueueADT )queue;
-    if (qADT->numNodes > 0) {
-        QueueNode *next = qADT->first;
+    if (queue->numNodes > 0) {
+        QueueNode *next = queue->first;
         while (next != NULL) {
             QueueNode *temp = next->previous;
             free(next);
@@ -70,16 +68,15 @@ void que_clear(QueueADT queue) {
         }
     }
 
-    qADT->comparison = NULL;
-    qADT->numNodes = 0;
+    queue->comparison = NULL;
+    queue->numNodes = 0;
 }
 
 // simply clears the nodes inside the queue then frees the queue pointer
 void que_destroy(QueueADT queue) {
-    QueueADT qADT = (QueueADT )queue;
     que_clear(queue);
 
-    free(qADT);
+    free(queue);
 }
 
 /**
@@ -95,12 +92,12 @@ void swap(QueueNode *a, QueueNode *b) {
 }
 
 /**
- * @brief BubbleSort's a linked list
+ * @brief sorts a linked list
  * 
  * @param head The head node of a linked list
  * @param comparison The comparsion function to sort with
  */
-void bubble_sort(QueueNode *head, cmp comparison) {
+void sort(QueueNode *head, cmp comparison) {
     bool swapped = false;
 
     if (head == NULL)
@@ -139,49 +136,46 @@ QueueNode *create_node(void * data) {
 
 // inserts a node into the queue
 void que_insert(QueueADT queue, void * data) {
-    QueueADT qADT = (QueueADT )queue;
     QueueNode *nodeToAdd = create_node(data);
 
-    // this ensures that qADT->first also is not NULL
+    // this ensures that queue->first also is not NULL
     // if it was NULL, then last would have to be NULL
     // if last isn't NULL, that means there is at least one value in the queue
-    if (qADT->last == NULL) {
-        qADT->last = nodeToAdd;
-        qADT->first = nodeToAdd;
-        qADT->numNodes++;
+    if (queue->last == NULL) {
+        queue->last = nodeToAdd;
+        queue->first = nodeToAdd;
+        queue->numNodes++;
         return;
     }
 
-    QueueNode *oldFirst = qADT->first;
+    QueueNode *oldFirst = queue->first;
     oldFirst->next = nodeToAdd;
     nodeToAdd->previous = oldFirst;
-    qADT->first = nodeToAdd;
+    queue->first = nodeToAdd;
 
-    qADT->numNodes++;
+    queue->numNodes++;
 
-    if(qADT->comparison != NULL) {
-        bubble_sort(qADT->first, qADT->comparison);
+    if(queue->comparison != NULL) {
+        sort(queue->first, queue->comparison);
     }
 }
 
 // removes the oldest node from the queue if no comparison function, else removes the first
 void *que_remove(QueueADT queue) {
-    QueueADT qADT = (QueueADT )queue;
-
-    assert(qADT->numNodes != 0);
-    if (qADT->comparison == NULL) {
-        QueueNode *last = qADT->last;
+    assert(queue->numNodes != 0);
+    if (queue->comparison == NULL) {
+        QueueNode *last = queue->last;
         void *retVal = last->val;
-        qADT->last = last->next;
-        qADT->numNodes--;
+        queue->last = last->next;
+        queue->numNodes--;
         free(last);
 
         return retVal;
     } else {
-        QueueNode *first = qADT->first;
+        QueueNode *first = queue->first;
         void *retVal = first->val;
-        qADT->first = first->previous;
-        qADT->numNodes--;
+        queue->first = first->previous;
+        queue->numNodes--;
         free(first);
 
         return retVal;
@@ -190,6 +184,5 @@ void *que_remove(QueueADT queue) {
 
 // checks if the queue is empty
 bool que_empty(QueueADT queue) {
-    QueueADT qADT = (QueueADT )queue;
-    return qADT->numNodes == 0;
+    return queue->numNodes == 0;
 }
