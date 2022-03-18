@@ -55,6 +55,13 @@ void board_put(Board *board, int r, int c, char chr) {
     board->arr[index].val = chr;
 }
 
+void board_set_visited(Board *board, int r, int c) {
+    int index = linearized_2d_cords(r, c, board->columns);
+    board->arr[index].visited = 1;
+}
+
+void board_set_path(Board *board, int r, int c);
+
 void board_delete(Board *board) {
     free(board->arr);
     free(board);

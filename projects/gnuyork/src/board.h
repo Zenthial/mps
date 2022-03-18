@@ -23,6 +23,10 @@ char board_get(Board *board, int r, int c);
 
 void board_put(Board *board, int r, int c, char chr);
 
+void board_set_visited(Board *board, int r, int c);
+
+void board_set_path(Board *board, int r, int c);
+
 void board_delete(Board *board);
 
 void board_print(Board *board);

@@ -11,9 +11,10 @@ typedef struct point {
 void bfs(Board *board, Point start, Point end) {
     QueueADT queue = que_create(NULL);
     int *visited = (int *)malloc(sizeof(int) * board->size);
-    Point current = start;
-
-
+    que_insert(queue, &start);
+    while (!que_empty(queue)) {
+        Point *currentPoint = (Point *)que_remove(queue);
+    }
 
     free(visited);
 }
