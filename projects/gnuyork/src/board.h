@@ -12,9 +12,9 @@ typedef struct board_ Board;
 
 Board *board_create(FILE *input);
 
-char board_get(int r, int c);
+char board_get(Board *board, int r, int c);
 
-char board_put(int r, int c, char chr);
+void board_put(Board *board, int r, int c, char chr);
 
 void board_delete(Board *board);
 

@@ -49,9 +49,24 @@ Board *board_create(FILE *input) {
     return board;
 }
 
-char board_get(int r, int c);
+/// takes in a row and a column and coverts it to a singular int
+/// maps a 2d coord to a 1d index
+/// @param r the int of the row to look at
+/// @param c the int of the column to look at
+/// @param cols the total columns within the board
+int linearized_2d_cords(int r, int c, int cols) {
+    return (cols * c) + r;
+}
 
-char board_put(int r, int c, char chr);
+char board_get(Board *board, int r, int c) {
+    int index = linearized_2d_cords(r, c, board->columns);
+    return board->arr[index];
+}
+
+void board_put(Board *board, int r, int c, char chr) {
+    int index = linearized_2d_cords(r, c, board->columns);
+    board->arr[index] = chr;
+}
 
 void board_delete(Board *board) {
     free(board->arr);
