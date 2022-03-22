@@ -26,7 +26,7 @@ int bfs(Board *board, Point start, Point end) {
             Point *neighbor = (Point *)que_remove(neighbors);
             int index = linearized_2d_cords(neighbor->x, neighbor->y, board->columns);
             if (visited[index] != 1) {
-                printf("visited index %d, value %d, neighbor x: %d, neighbor y: %d\n", index, visited[index], neighbor->x, neighbor->y);
+                // printf("visited index %d, value %d, neighbor x: %d, neighbor y: %d\n", index, visited[index], neighbor->x, neighbor->y);
                 visited[index] = 1;
                 back_trace[index] = current_point_index;
                 if (neighbor->x == end.x && neighbor->y == end.y) {
@@ -44,14 +44,13 @@ int bfs(Board *board, Point start, Point end) {
     }
 
     int steps = 0;
-    printf("0 0 %d\n", back_trace[0]);
     while (back_trace[found_index] != -1) {
         board_set_path(board, found_index);
         // printf("trace index: %d\n", back_trace[found_index]);
         found_index = back_trace[found_index];
         steps++;
     }
-    board_set_path(board, 0);
+    board_set_path(board, 0, 0);
 
     while(!que_empty(queue)) {
         Point *to_free = (Point *)que_remove(queue);
@@ -59,6 +58,7 @@ int bfs(Board *board, Point start, Point end) {
     }
 
     free(visited);
+    free(back_trace);
 
     return steps;
 }

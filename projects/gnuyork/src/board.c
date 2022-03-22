@@ -8,10 +8,11 @@ Board *board_create(FILE *input) {
     int default_size = 20;
 
     Board *board = (Board *)malloc(sizeof(Board));
-    board->arr = (char *)malloc(sizeof(char) * default_size);
+    board->arr = (char **)malloc(sizeof(char) * default_size);
     board->size = default_size;
     board->indexes = 0;
     board->columns = 0;
+    int x = 0;
 
     while (true) {
         char chr = fgetc(input);
@@ -24,14 +25,16 @@ Board *board_create(FILE *input) {
 
         if (chr == '\n') {
             board->columns++;
+            x = 0;
             continue;
         }
 
-        board->arr[board->indexes] = chr;
+        board->arr[board->columns][x] = chr;
         board->indexes++;
+        x++;
 
         if (board->indexes == board->size - 1) {
-            char *arr = (char *)realloc(board->arr, board->size * 2);
+            char **arr = (char **)realloc(board->arr, board->size * 2);
             board->size *= 2;
             board->arr = arr;
         }
@@ -53,9 +56,10 @@ QueueADT board_get_neighbors(Board *board, int r, int c) {
         x = possible_neighbors[i][0];
         y = possible_neighbors[i][1];
 
-        int index = linearized_2d_cords(x, y, board->columns);
+        // int index = linearized_2d_cords(x, y, board->columns);
         if (x >= 0 && y >= 0) {
-            if (board->arr[index] == '0') {
+            printf("x: %d y: %d c: %c\n", x, y, board->arr[x][y]);
+            if (board->arr[x][y] == '0') {
                 Point *point = (Point *)malloc(sizeof(Point));
                 point->x = x;
                 point->y = y;
@@ -75,17 +79,17 @@ int linearized_2d_cords(int r, int c, int cols) {
 }
 
 char board_get(Board *board, int r, int c) {
-    int index = linearized_2d_cords(r, c, board->columns);
-    return board->arr[index];
+    // int index = linearized_2d_cords(r, c, board->columns);
+    return board->arr[r][c];
 }
 
 void board_put(Board *board, int r, int c, char chr) {
-    int index = linearized_2d_cords(r, c, board->columns);
-    board->arr[index] = chr;
+    // int index = linearized_2d_cords(r, c, board->columns);
+    board->arr[r][c] = chr;
 }
 
-void board_set_path(Board *board, int index) {
-    board->arr[index] = '2';
+void board_set_path(Board *board, int x, int y) {
+    board->arr[x][y] = '2';
 }
 
 void board_delete(Board *board) {
@@ -105,34 +109,27 @@ void print_details(int row_size) {
 
 void board_print(Board *board) {
     int rows = board->indexes / board->columns;
-    int row_counter = 0;
     print_details(rows);
-    for (int i = 0; i < board->indexes; i++) {
+    for (int i = 0; i < board->columns; i ++) {
         if (i == 0) {
             printf(" ");
-        } else if (row_counter == 0) {
+        } else {
             printf("|");
         }
-
-        char point = board->arr[i];
-        if (point == '0') {
-            point = '.';
-        } else if (point == '1') {
-            point = '#';
-        } else if (point == '2') {
-            point = '+';
+        for (int j = 0; j < rows; j++) {
+            char point = board->arr[i][j];
+            if (point == '0')
+                point = '.';
+            if (point == '1')
+                point = '#';
+            if (point == '2')
+                point = '+';
+            printf(" %c", point);
         }
-        printf(" %c", point);
-
-        if (i == board->indexes - 1) {
+        if (i == board->columns - 1) {
             printf(" \n");
-        } else if (row_counter == rows - 1) {
+        } else {
             printf(" |\n");
-        }
-
-        row_counter++;
-        if (row_counter >= rows) {
-            row_counter = 0;
         }
     }
     print_details(rows);
