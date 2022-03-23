@@ -68,30 +68,36 @@ int bfs(Board *board, Point start, Point end) {
 }
 
 int main(int argc, char *argv[]) {
-    bool help = false;
     bool pretty_print_solution = false;
     bool solution_print = false;
     bool pretty_print_initial = false;
     FILE *in_file_pointer = stdin;
     FILE *out_file_pointer = stdout;
 
-    get_options(&help, &pretty_print_solution, &solution_print, 
-                &pretty_print_initial, &in_file_pointer, &out_file_pointer);
+    get_options(&pretty_print_solution, &solution_print, 
+                &pretty_print_initial, &in_file_pointer, &out_file_pointer, argc, argv);
 
-    Board *board = board_create(stdin);
+    Board *board = board_create(in_file_pointer);
     const Point start = {0, 0};
     const Point end = {(board->indexes / board->columns) - 1, board->columns - 1};
-    // printf("start: %d end: %d", end.x, end.y);
-    // printf("elms %d\n", board->indexes);
-    board_print(board);
-    int steps = bfs(board, start, end);
-
-    if (steps > 0) {
-        printf("Solution in %d steps.\n", steps + 1);
-    } else {
-        printf("No solution.\n");
+    
+    if (pretty_print_initial) {
+        board_print(board, out_file_pointer);
     }
-    board_print(board);
+
+    int steps = bfs(board, start, end);
+    if (solution_print) {
+        if (steps > 0) {
+            printf("Solution in %d steps.\n", steps + 1);
+        } else {
+            printf("No solution.\n");
+        }
+    }
+    
+    if (pretty_print_solution) {
+        board_print(board, out_file_pointer);
+    }
+    
     board_delete(board);
 
     if (in_file_pointer != stdin) {

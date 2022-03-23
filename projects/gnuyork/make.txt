@@ -1,1 +1,1 @@
-gcc -Wall -Wextra -pedantic -std=c99 -ggdb src/mopsolver.c src/QueueADT.c src/board.c -o out/test
+gcc -Wall -Wextra -pedantic -std=c99 -ggdb src/mopsolver.c src/QueueADT.c src/board.c src/options.c -o out/test

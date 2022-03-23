@@ -27,7 +27,7 @@ void board_set_path(Board *board, int index);
 
 void board_delete(Board *board);
 
-void board_print(Board *board);
+void board_print(Board *board, FILE *out_stream);
 
 /// takes in a row and a column and coverts it to a singular int
 /// maps a 2d coord to a 1d index

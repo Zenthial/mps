@@ -104,23 +104,23 @@ void board_delete(Board *board) {
 
 /// prints out the top and bottom |----| lines
 /// @param row_size how many - chars should be written
-void print_details(int row_size) {
-    printf("|-");
+void print_details(int row_size, FILE *out_stream) {
+    fprintf(out_stream, "|-");
     for (int i = 0; i < row_size; i++) {
-        printf("--");
+        fprintf(out_stream, "--");
     }
-    printf("|\n");
+    fprintf(out_stream, "|\n");
 }
 
-void board_print(Board *board) {
+void board_print(Board *board, FILE *out_stream) {
     int rows = board->indexes / board->columns;
     int row_counter = 0;
-    print_details(rows);
+    print_details(rows, out_stream);
     for (int i = 0; i < board->indexes; i++) {
         if (i == 0) {
-            printf("  ");
+            fprintf(out_stream, "  ");
         } else if (row_counter == 0) {
-            printf("| ");
+            fprintf(out_stream, "| ");
         }
 
         char point = board->arr[i];
@@ -138,12 +138,12 @@ void board_print(Board *board) {
         //     printf(" %c", point);
         // }
 
-        printf("%c ", point);
+        fprintf(out_stream, "%c ", point);
 
         if (i == board->indexes - 1) {
-            printf(" \n");
+            fprintf(out_stream, " \n");
         } else if (row_counter == rows - 1) {
-            printf("|\n");
+            fprintf(out_stream, "|\n");
         }
 
         row_counter++;
@@ -151,5 +151,5 @@ void board_print(Board *board) {
             row_counter = 0;
         }
     }
-    print_details(rows);
+    print_details(rows, out_stream);
 }
