@@ -1,12 +1,14 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 #include "options.h"
 
 bool get_options(
     bool *help, bool *pretty_print_solution, bool *solution_print,
-    bool *pretty_print_initial, FILE *in_file_pointer, FILE *out_file_pointer
+    bool *pretty_print_initial, FILE **in_file_pointer, FILE **out_file_pointer,
+    int argc, char *argv[]
 ) {
     bool return_val = true;
     char c;
