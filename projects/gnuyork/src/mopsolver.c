@@ -1,8 +1,10 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include "board.h"
+
 #include "QueueADT.h"
+#include "board.h"
+#include "options.h"
 
 int bfs(Board *board, Point start, Point end) {
     QueueADT queue = que_create(NULL);
@@ -40,7 +42,6 @@ int bfs(Board *board, Point start, Point end) {
                 // printf("x %d, y %d has been visited\n", neighbor->x, neighbor->y);
                 free(neighbor);
             }
-
         }
     }
 
@@ -56,7 +57,7 @@ int bfs(Board *board, Point start, Point end) {
         board_set_path(board, 0);
     }
 
-    while(!que_empty(queue)) {
+    while (!que_empty(queue)) {
         Point *to_free = (Point *)que_remove(queue);
         free(to_free);
     }
@@ -67,21 +68,39 @@ int bfs(Board *board, Point start, Point end) {
 }
 
 int main(int argc, char *argv[]) {
+    bool help = false;
+    bool pretty_print_solution = false;
+    bool solution_print = false;
+    bool pretty_print_initial = false;
+    FILE *in_file_pointer = stdin;
+    FILE *out_file_pointer = stdout;
+
+    get_options(&help, &pretty_print_solution, &solution_print, 
+                &pretty_print_initial, &in_file_pointer, &out_file_pointer);
+
     Board *board = board_create(stdin);
     const Point start = {0, 0};
-    const Point end = {(board->indexes/board->columns) - 1, board->columns - 1};
+    const Point end = {(board->indexes / board->columns) - 1, board->columns - 1};
     // printf("start: %d end: %d", end.x, end.y);
     // printf("elms %d\n", board->indexes);
     board_print(board);
     int steps = bfs(board, start, end);
 
     if (steps > 0) {
-        printf("Solution in %d steps.\n", steps+1);
+        printf("Solution in %d steps.\n", steps + 1);
     } else {
         printf("No solution.\n");
     }
     board_print(board);
     board_delete(board);
+
+    if (in_file_pointer != stdin) {
+        fclose(in_file_pointer);
+    }
+
+    if (out_file_pointer != stdout) {
+        fclose(out_file_pointer);
+    }
 
     return 0;
 }
