@@ -4,6 +4,9 @@
 #include "board.h"
 #include "QueueADT.h"
 
+#define RED "\033[0;31m"
+#define WHT "\033[0;37m"
+
 Board *board_create(FILE *input) {
     int default_size = 20;
     int num_elm_rows = 0;
@@ -26,9 +29,8 @@ Board *board_create(FILE *input) {
 
         if (chr == '\n') {
             board->columns++;
-            if (board->row_elms == 0) {
-                board->row_elms = num_elm_rows;
-            }
+            board->row_elms = num_elm_rows;
+            num_elm_rows = 0;
             continue;
         }
 
@@ -47,29 +49,30 @@ Board *board_create(FILE *input) {
 }
 
 QueueADT board_get_neighbors(Board *board, int r, int c) {
-    int possible_neighbors[8][2] = {
-        {r + 1, c}, {r - 1, c}, {r - 1, c - 1}, {r + 1, c + 1},
-        {r + 1, c - 1}, {r - 1, c + 1}, {r, c - 1}, {r, c + 1}
+    int possible_neighbors[4][2] = {
+        {r, c - 1}, {r, c + 1},
+        {r + 1, c}, {r - 1, c},
     };
 
     QueueADT neighbors_queue = que_create(NULL);
+    // printf("%d %d\n", r, c);
 
-    for (int i = 0; i < 8; i++) {
-        int x, y;
-        x = possible_neighbors[i][0];
-        y = possible_neighbors[i][1];
+    for (int i = 0; i < 4; i++) {
+        int x = possible_neighbors[i][0];
+        int y = possible_neighbors[i][1];
 
         int index = linearized_2d_cords(x, y, board->row_elms);
-        if (x >= 0 && y >= 0) {
+        // printf("x: %d y: %d bool: %d index: %c\n", x, y, (x >= 0 && y >= 0 && y < board->row_elms && x < board->columns), board->arr[index]);
+
+        if (x >= 0 && y >= 0 && y < board->columns && x < board->row_elms) {
             if (board->arr[index] == '0') {
                 Point *point = (Point *)malloc(sizeof(Point));
                 point->x = x;
                 point->y = y;
-                printf("inserted from x: %d, y: %d\n", x, y);
+                // printf("inserted from x: %d, y: %d\n", x, y);
                 que_insert(neighbors_queue, point);
             }
         }
-        
     }
 
     return neighbors_queue;
@@ -102,11 +105,11 @@ void board_delete(Board *board) {
 /// prints out the top and bottom |----| lines
 /// @param row_size how many - chars should be written
 void print_details(int row_size) {
-    printf("|");
+    printf("|-");
     for (int i = 0; i < row_size; i++) {
-        printf(" -");
+        printf("--");
     }
-    printf(" |\n");
+    printf("|\n");
 }
 
 void board_print(Board *board) {
@@ -115,9 +118,9 @@ void board_print(Board *board) {
     print_details(rows);
     for (int i = 0; i < board->indexes; i++) {
         if (i == 0) {
-            printf(" ");
+            printf("  ");
         } else if (row_counter == 0) {
-            printf("|");
+            printf("| ");
         }
 
         char point = board->arr[i];
@@ -128,12 +131,19 @@ void board_print(Board *board) {
         } else if (point == '2') {
             point = '+';
         }
-        printf(" %c", point);
+
+        // if (point == '+') {
+        //     printf(" %s%c%s", RED, point, WHT);
+        // } else {
+        //     printf(" %c", point);
+        // }
+
+        printf("%c ", point);
 
         if (i == board->indexes - 1) {
             printf(" \n");
         } else if (row_counter == rows - 1) {
-            printf(" |\n");
+            printf("|\n");
         }
 
         row_counter++;
