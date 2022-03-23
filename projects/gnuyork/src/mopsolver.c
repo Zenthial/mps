@@ -66,10 +66,10 @@ int bfs(Board *board, Point start, Point end) {
     return steps;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     Board *board = board_create(stdin);
-    Point start = {0, 0};
-    Point end = {(board->indexes/board->columns) - 1, board->columns - 1};
+    const Point start = {0, 0};
+    const Point end = {(board->indexes/board->columns) - 1, board->columns - 1};
     // printf("start: %d end: %d", end.x, end.y);
     // printf("elms %d\n", board->indexes);
     board_print(board);
