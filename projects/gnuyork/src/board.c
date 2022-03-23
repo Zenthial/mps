@@ -6,13 +6,14 @@
 
 Board *board_create(FILE *input) {
     int default_size = 20;
+    int num_elm_rows = 0;
 
     Board *board = (Board *)malloc(sizeof(Board));
-    board->arr = (char **)malloc(sizeof(char) * default_size);
+    board->arr = (char *)malloc(sizeof(char) * default_size);
     board->size = default_size;
     board->indexes = 0;
     board->columns = 0;
-    int x = 0;
+    board->row_elms = 0;
 
     while (true) {
         char chr = fgetc(input);
@@ -25,16 +26,18 @@ Board *board_create(FILE *input) {
 
         if (chr == '\n') {
             board->columns++;
-            x = 0;
+            if (board->row_elms == 0) {
+                board->row_elms = num_elm_rows;
+            }
             continue;
         }
 
-        board->arr[board->columns][x] = chr;
+        board->arr[board->indexes] = chr;
         board->indexes++;
-        x++;
+        num_elm_rows++;
 
         if (board->indexes == board->size - 1) {
-            char **arr = (char **)realloc(board->arr, board->size * 2);
+            char *arr = (char *)realloc(board->arr, board->size * 2);
             board->size *= 2;
             board->arr = arr;
         }
@@ -56,10 +59,9 @@ QueueADT board_get_neighbors(Board *board, int r, int c) {
         x = possible_neighbors[i][0];
         y = possible_neighbors[i][1];
 
-        // int index = linearized_2d_cords(x, y, board->columns);
+        int index = linearized_2d_cords(x, y, board->row_elms);
         if (x >= 0 && y >= 0) {
-            printf("x: %d y: %d c: %c\n", x, y, board->arr[x][y]);
-            if (board->arr[x][y] == '0') {
+            if (board->arr[index] == '0') {
                 Point *point = (Point *)malloc(sizeof(Point));
                 point->x = x;
                 point->y = y;
@@ -74,22 +76,22 @@ QueueADT board_get_neighbors(Board *board, int r, int c) {
 }
 
 /// converts a 2d pair of ints to a 1d int
-int linearized_2d_cords(int r, int c, int cols) {
-    return (cols * c) + r;
+int linearized_2d_cords(int r, int c, int num_row_elms) {
+    return (num_row_elms * c) + r;
 }
 
 char board_get(Board *board, int r, int c) {
-    // int index = linearized_2d_cords(r, c, board->columns);
-    return board->arr[r][c];
+    int index = linearized_2d_cords(r, c, board->row_elms);
+    return board->arr[index];
 }
 
 void board_put(Board *board, int r, int c, char chr) {
-    // int index = linearized_2d_cords(r, c, board->columns);
-    board->arr[r][c] = chr;
+    int index = linearized_2d_cords(r, c, board->row_elms);
+    board->arr[index] = chr;
 }
 
-void board_set_path(Board *board, int x, int y) {
-    board->arr[x][y] = '2';
+void board_set_path(Board *board, int index) {
+    board->arr[index] = '2';
 }
 
 void board_delete(Board *board) {
@@ -109,27 +111,34 @@ void print_details(int row_size) {
 
 void board_print(Board *board) {
     int rows = board->indexes / board->columns;
+    int row_counter = 0;
     print_details(rows);
-    for (int i = 0; i < board->columns; i ++) {
+    for (int i = 0; i < board->indexes; i++) {
         if (i == 0) {
             printf(" ");
-        } else {
+        } else if (row_counter == 0) {
             printf("|");
         }
-        for (int j = 0; j < rows; j++) {
-            char point = board->arr[i][j];
-            if (point == '0')
-                point = '.';
-            if (point == '1')
-                point = '#';
-            if (point == '2')
-                point = '+';
-            printf(" %c", point);
+
+        char point = board->arr[i];
+        if (point == '0') {
+            point = '.';
+        } else if (point == '1') {
+            point = '#';
+        } else if (point == '2') {
+            point = '+';
         }
-        if (i == board->columns - 1) {
+        printf(" %c", point);
+
+        if (i == board->indexes - 1) {
             printf(" \n");
-        } else {
+        } else if (row_counter == rows - 1) {
             printf(" |\n");
+        }
+
+        row_counter++;
+        if (row_counter >= rows) {
+            row_counter = 0;
         }
     }
     print_details(rows);

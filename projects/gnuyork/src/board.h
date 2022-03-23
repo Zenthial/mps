@@ -10,10 +10,11 @@ typedef struct point {
 } Point;
 
 typedef struct board{
-    char **arr;
+    char *arr;
     int size;
     int indexes;
     int columns;
+    int row_elms;
 } Board;
 
 Board *board_create(FILE *input);
@@ -22,7 +23,7 @@ char board_get(Board *board, int r, int c);
 
 void board_put(Board *board, int r, int c, char chr);
 
-void board_set_path(Board *board, int r, int c);
+void board_set_path(Board *board, int index);
 
 void board_delete(Board *board);
 
