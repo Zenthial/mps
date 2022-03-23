@@ -44,15 +44,17 @@ int bfs(Board *board, Point start, Point end) {
         }
     }
 
-    int steps = 1;
+    int steps = 0;
     // printf("0 0 %d\n", back_trace[0]);
-    while (back_trace[found_index] != -1) {
+    while (back_trace[found_index] != -1 && found_index != -1) {
         board_set_path(board, found_index);
         // printf("trace index: %d\n", back_trace[found_index]);
         found_index = back_trace[found_index];
         steps++;
     }
-    board_set_path(board, 0);
+    if (steps > 0) {
+        board_set_path(board, 0);
+    }
 
     while(!que_empty(queue)) {
         Point *to_free = (Point *)que_remove(queue);
@@ -73,7 +75,11 @@ int main() {
     board_print(board);
     int steps = bfs(board, start, end);
 
-    printf("Solution in %d steps.\n", steps);
+    if (steps > 0) {
+        printf("Solution in %d steps.\n", steps+1);
+    } else {
+        printf("No solution.\n");
+    }
     board_print(board);
     board_delete(board);
 
