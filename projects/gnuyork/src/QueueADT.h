@@ -49,7 +49,7 @@ typedef struct queueADT * QueueADT;
 QueueADT que_create( int (*cmp)(const void * a, const void * b) );
 
 
-/// Tear down and deallocate the supplied QueuADT.
+/// Tear down and deallocate the supplied QueueADT.
 ///
 /// @param queue - the QueueADT to be manipulated
 

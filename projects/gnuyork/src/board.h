@@ -34,7 +34,7 @@ void board_print(Board *board, FILE *out_stream);
 /// @param r the int of the row to look at
 /// @param c the int of the column to look at
 /// @param cols the total columns within the board
-int linearized_2d_cords(int r, int c, int cols);
+int linearized_2d_cords(int r, int c, int num_row_elms);
 
 QueueADT board_get_neighbors(Board *board, int r, int c);
 

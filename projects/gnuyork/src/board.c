@@ -8,7 +8,7 @@
 #define WHT "\033[0;37m"
 
 Board *board_create(FILE *input) {
-    int default_size = 20;
+    int default_size = 5000;
     int num_elm_rows = 0;
 
     Board *board = (Board *)malloc(sizeof(Board));

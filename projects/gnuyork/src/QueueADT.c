@@ -31,7 +31,6 @@ typedef struct queueNode {
  * tracks the number of nodes in the queue
  * has an optional comparison function pointer
  */
-
 typedef struct queueADT {
     QueueNode *first;
     QueueNode *last;
@@ -63,6 +62,7 @@ void que_clear(QueueADT queue) {
         QueueNode *next = queue->first;
         while (next != NULL) {
             QueueNode *temp = next->previous;
+
             free(next);
             next = temp;
         }
@@ -167,6 +167,9 @@ void *que_remove(QueueADT queue) {
         QueueNode *last = queue->last;
         void *retVal = last->val;
         queue->last = last->next;
+        if (queue->last != NULL) {
+            queue->last->previous = NULL;
+        }
         queue->numNodes--;
         free(last);
 
@@ -176,14 +179,13 @@ void *que_remove(QueueADT queue) {
         void *retVal = first->val;
         queue->first = first->previous;
         queue->numNodes--;
+        if (first == queue->last) {
+            queue->last = NULL;
+        }
         free(first);
 
         return retVal;
     }
-}
-
-int que_size(QueueADT queue) {
-    return queue->numNodes;
 }
 
 // checks if the queue is empty
