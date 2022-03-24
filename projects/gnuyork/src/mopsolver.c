@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     int steps = solve(board, start, end);
     if (solution_print) {
         if (steps > 0) {
-            printf("Solution in %d steps.\n", steps);
+            printf("Solution in %d steps.\n", steps + 1);
         } else {
             printf("No solution.\n");
         }

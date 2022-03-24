@@ -20,10 +20,10 @@ typedef struct _a_star_point {
 } AStarPoint;
 
 int bfs(Board *board, Point start, Point end) {
-    QueueADT queue = que_create(NULL);
-    int *visited = (int *)calloc(board->indexes+1, sizeof(int));
-    int *back_trace = (int *)calloc(board->indexes+1, sizeof(int));
-    for (int i = 0; i < board->indexes+1; i++) {
+QueueADT queue = que_create(NULL);
+    int *visited = (int *)calloc(board->size, sizeof(int));
+    int *back_trace = (int *)malloc(board->size * sizeof(int));
+    for (int i = 0; i < board->size; i++) {
         back_trace[i] = -1;
     }
     bool found = false;
@@ -39,11 +39,6 @@ int bfs(Board *board, Point start, Point end) {
 
         while (!que_empty(neighbors)) {
             Point *neighbor = (Point *)que_remove(neighbors);
-            if (found) {
-                free(neighbor);
-                continue;
-            }
-
             int index = linearized_2d_cords(neighbor->x, neighbor->y, board->row_elms);
             if (visited[index] != 1) {
                 // printf("visited index %d, value %d, neighbor x: %d, neighbor y: %d\n", index, visited[index], neighbor->x, neighbor->y);
@@ -53,13 +48,15 @@ int bfs(Board *board, Point start, Point end) {
                     found = true;
                     found_index = index;
                     free(neighbor);
-                    continue;
+                    break;
                 }
                 que_insert(queue, neighbor);
+            } else {
+                // printf("x %d, y %d has been visited\n", neighbor->x, neighbor->y);
+                free(neighbor);
             }
-            free(neighbor);
+
         }
-        que_destroy(neighbors);
     }
 
     int steps = 0;
@@ -70,13 +67,17 @@ int bfs(Board *board, Point start, Point end) {
         found_index = back_trace[found_index];
         steps++;
     }
+
     if (steps > 0) {
         board_set_path(board, 0);
     }
 
-    que_destroy(queue);
+    while(!que_empty(queue)) {
+        Point *to_free = (Point *)que_remove(queue);
+        free(to_free);
+    }
+
     free(visited);
-    free(back_trace);
 
     return steps;
 }
