@@ -31,7 +31,6 @@ typedef struct queueNode {
  * tracks the number of nodes in the queue
  * has an optional comparison function pointer
  */
-
 typedef struct queueADT {
     QueueNode *first;
     QueueNode *last;
