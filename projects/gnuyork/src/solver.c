@@ -43,8 +43,8 @@ int bfs(Board *board, Point start, Point end) {
                 free(neighbor);
                 continue;
             }
+
             int index = linearized_2d_cords(neighbor->x, neighbor->y, board->row_elms);
-            printf("%d\n", index);
             if (visited[index] != 1) {
                 // printf("visited index %d, value %d, neighbor x: %d, neighbor y: %d\n", index, visited[index], neighbor->x, neighbor->y);
                 visited[index] = 1;
@@ -59,7 +59,7 @@ int bfs(Board *board, Point start, Point end) {
             }
             free(neighbor);
         }
-        // que_destroy(neighbors);
+        que_destroy(neighbors);
     }
 
     int steps = 0;
