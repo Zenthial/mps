@@ -19,7 +19,7 @@ typedef struct _a_star_point {
     struct _a_star_point *parent;
 } AStarPoint;
 
-int bfs(Board *board, Point *start, Point end) {
+int bfs(Board *board, Point start, Point end) {
 QueueADT queue = que_create(NULL);
     int *visited = (int *)calloc(board->size, sizeof(int));
     int *back_trace = (int *)malloc(board->size * sizeof(int));
@@ -29,40 +29,31 @@ QueueADT queue = que_create(NULL);
     bool found = false;
     int found_index = -1;
 
-    que_insert(queue, start);
+    que_insert(queue, &start);
     visited[0] = 1;
     while (!que_empty(queue) && !found) {
-        Point *currentPoint = (Point *)que_remove(queue);
-        int current_point_index = linearized_2d_cords(currentPoint->x, currentPoint->y, board->row_elms);
-        QueueADT neighbors = board_get_neighbors(board, currentPoint->x, currentPoint->y);
-        // printf("x: %d, y: %d neighbors size: %d\n", currentPoint->x, currentPoint->y, que_size(neighbors));
+        Point currentPoint = *(Point *)que_remove(queue);
+        int current_point_index = linearized_2d_cords(currentPoint.x, currentPoint.y, board->row_elms);
+        QueueADT neighbors = board_get_neighbors(board, currentPoint.x, currentPoint.y);
+        printf("x: %d, y: %d\n", currentPoint.x, currentPoint.y);
 
         while (!que_empty(neighbors)) {
-            Point *neighbor = (Point *)que_remove(neighbors);
-            if (found) {
-                free(neighbor);
-                continue;
-            }
-            int index = linearized_2d_cords(neighbor->x, neighbor->y, board->row_elms);
+            Point neighbor = *(Point *)que_remove(neighbors);
+            printf("neighbor x: %d, neighbor y: %d\n", neighbor.x, neighbor.y);
+            int index = linearized_2d_cords(neighbor.x, neighbor.y, board->row_elms);
             if (visited[index] != 1) {
-                // printf("visited index %d, value %d, neighbor x: %d, neighbor y: %d\n", index, visited[index], neighbor->x, neighbor->y);
                 visited[index] = 1;
                 back_trace[index] = current_point_index;
-                if (neighbor->x == end.x && neighbor->y == end.y) {
+                if (neighbor.x == end.x && neighbor.y == end.y) {
                     found = true;
                     found_index = index;
-                    free(neighbor);
                     continue;
                 }
-                que_insert(queue, neighbor);
-            } else {
-                // printf("x %d, y %d has been visited\n", neighbor->x, neighbor->y);
-                free(neighbor);
+                que_insert(queue, &neighbor);
             }
 
         }
         free(neighbors);
-        free(currentPoint);
     }
 
     int steps = 0;
@@ -108,8 +99,8 @@ int compare_points(const void *one, const void *two) {
     return point_one->f > point_two->f;
 }
 
-int a_star(Board *board, Point *start, Point end) {
-    AStarPoint start_point = {start->x, start->y, 0, 0, 0, 0, NULL};
+int a_star(Board *board, Point start, Point end) {
+    AStarPoint start_point = {start.x, start.y, 0, 0, 0, 0, NULL};
 
     QueueADT open = que_create(*compare_points);
 
@@ -167,6 +158,6 @@ int a_star(Board *board, Point *start, Point end) {
     return 0;
 }
 
-int solve(Board *board, Point *start, Point end) {
+int solve(Board *board, Point start, Point end) {
     return bfs(board, start, end);
 }

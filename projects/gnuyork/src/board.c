@@ -66,11 +66,9 @@ QueueADT board_get_neighbors(Board *board, int r, int c) {
 
         if (x >= 0 && y >= 0 && y < board->columns && x < board->row_elms) {
             if (board->arr[index] == '0') {
-                Point *point = (Point *)malloc(sizeof(Point));
-                point->x = x;
-                point->y = y;
-                // printf("inserted from x: %d, y: %d\n", x, y);
-                que_insert(neighbors_queue, point);
+                Point point = {x, y};
+                printf("inserted from x: %d, y: %d\n", x, y);
+                que_insert(neighbors_queue, &point);
             }
         }
     }

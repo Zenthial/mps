@@ -6,4 +6,4 @@
 
 #include "board.h"
 
-int solve(Board *board, Point *start, Point end);
+int solve(Board *board, Point start, Point end);
