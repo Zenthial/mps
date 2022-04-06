@@ -1,6 +1,9 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "KStream.h"
 
@@ -62,15 +65,23 @@ int main(int argc, char *argv[]) {
     char *out = (char *)ks_translate(stream, input_buff.buffer, input_buff.buffer_len);
 
     FILE *out_file;
-    if (strcmp(argv[3],"-") == 0) {
+    int stdout_bool = 0;
+    if (strcmp(argv[3], "-") == 0) {
         out_file = stdout;
-    } else {
+        stdout_bool = 1;
+    }
+    else {
         out_file = fopen(argv[3], "w");
     }
 
     for (int i = 0; i < input_buff.buffer_len; i++) {
         if (out[i] != '0') {
-            fprintf(out_file, "%c", out[i]);
+            if (stdout_bool == 1 && !isascii(out[i])) {
+                fprintf(out_file, "%2x", out[i]);
+            }
+            else {
+                fprintf(out_file, "%c", out[i]);
+            }
         }
     }
 
