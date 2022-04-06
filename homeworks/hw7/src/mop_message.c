@@ -36,7 +36,9 @@ int main(int argc, char *argv[]) {
     FILE *key_file = fopen(argv[1], "r");
     FILE *input_file = fopen(argv[2], "r");
     int key_len = read_file(key_file, key, BUFF_SIZE, 0);
+    fclose(key_file);
     int input_len = read_file(input_file, input, BUFF_SIZE, 0);
+    fclose(input_file);
 
     KStream *stream = ks_create(key, key_len);
     free(key);
@@ -56,8 +58,6 @@ int main(int argc, char *argv[]) {
     }
 
     ks_destroy(stream);
-    fclose(key_file);
-    fclose(input_file);
     fclose(out_file);
     return 0;
 }

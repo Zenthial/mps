@@ -3,6 +3,12 @@
 
 #define S_SIZE 256 // some magic number in the kstream algorithm
 
+typedef struct kStream {
+    int *s;
+    int i;
+    int j;
+} KStream;
+
 unsigned char ks_next_byte(KStream *stream) {
     int i = stream->i;
     int j = stream->j;

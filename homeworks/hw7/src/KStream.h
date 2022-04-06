@@ -1,8 +1,4 @@
-typedef struct kStream {
-    int *s;
-    int i;
-    int j;
-} KStream;
+typedef struct kStream KStream;
 
 /// Create takes full ownership of the key pointer.
 /// It should not be referenced after passing it to ks_create
