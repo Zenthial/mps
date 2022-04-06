@@ -175,6 +175,9 @@ void *que_remove(QueueADT queue) {
         void *retVal = first->val;
         queue->first = first->previous;
         queue->numNodes--;
+        if (first == queue->last) {
+            queue->last = NULL;
+        }
         free(first);
 
         return retVal;
