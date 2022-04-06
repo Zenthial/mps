@@ -132,13 +132,13 @@ void board_print(Board *board, FILE *out_stream) {
             point = '+';
         }
 
-        if (point == '+') {
-            fprintf(out_stream, "%s%c%s ", RED, point, WHT);
-        } else {
-            fprintf(out_stream, "%c ", point);
-        }
+        // if (point == '+') {
+        //     fprintf(out_stream, "%s%c%s ", RED, point, WHT);
+        // } else {
+        //     fprintf(out_stream, "%c ", point);
+        // }
 
-        // fprintf(out_stream, "%c ", point);
+        fprintf(out_stream, "%c ", point);
 
         if (i == board->indexes - 1) {
             fprintf(out_stream, " \n");
