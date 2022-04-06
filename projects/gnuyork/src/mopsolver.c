@@ -18,9 +18,11 @@ int main(int argc, char *argv[]) {
                 &pretty_print_initial, &in_file_pointer, &out_file_pointer, argc, argv);
 
     Board *board = board_create(in_file_pointer);
-    const Point start = {0, 0};
+    Point *start = (Point *)malloc(sizeof(Point));
+    start->x = 0;
+    start->y = 0;
     const Point end = {(board->indexes / board->columns) - 1, board->columns - 1};
-    
+
     if (pretty_print_initial) {
         board_print(board, out_file_pointer);
     }
