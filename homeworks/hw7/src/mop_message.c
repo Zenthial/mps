@@ -7,12 +7,19 @@
 #define BUFF_SIZE 8
 #define BYTE_SIZE 1
 
+/// Representation of a File
+/// @field buffer - Char array pointer
+/// @field buffer_size - size of the underlying buffer array
+/// @field buffer_len - the amount of elements in the underlying array
 typedef struct fileBuffer {
     unsigned char *buffer;
     int buffer_size;
     int buffer_len;
 } FileBuffer;
 
+/// Based off of a given file pointer, convert it to a FileBuffer struct
+/// @param file_ptr A valid, non-null FILE ptr 
+/// @return FileBuffer 
 FileBuffer read_file(FILE *file_ptr) {
     int buffer_size = 0;
     int buffer_len = 0;
@@ -38,6 +45,7 @@ FileBuffer read_file(FILE *file_ptr) {
     return buf;
 }
 
+/// Main entry point of the program
 int main(int argc, char *argv[]) {
     if (argc != 4) {
         fprintf(stderr, "Usage: mop_message keyfile in-file [ out-file | - ]\n");

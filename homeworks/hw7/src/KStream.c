@@ -11,7 +11,10 @@ typedef struct kStream {
 #define _K_STREAM_
 #include "KStream.h"
 
-unsigned char ks_next_byte(KStream *stream) {
+/// Gets the next byte from the stream
+/// @param stream The KStream to get the next byte from
+/// @return The next unsigned char byte in the stream
+static unsigned char ks_next_byte(KStream *stream) {
     int i = stream->i;
     int j = stream->j;
 
@@ -28,10 +31,16 @@ unsigned char ks_next_byte(KStream *stream) {
     return stream->s[(stream->s[i] + stream->s[j]) % S_SIZE];
 }
 
-unsigned char ks_encode(KStream *stream, unsigned char character) {
+/// Encodes the passed character, 
+/// by XORing the character with the next byte in the stream
+/// @param stream The KStream to get the next byte from
+/// @param character The character to encode
+/// @return The next unsigned char byte in the stream XOR character
+static unsigned char ks_encode(KStream *stream, unsigned char character) {
     return character ^ ks_next_byte(stream);
 }
 
+/// Translates a given byte input 
 unsigned char *ks_translate(KStream *stream, unsigned char *input, int input_len) {
     unsigned char *output = (unsigned char *)malloc(sizeof(char) * input_len);
 
@@ -42,11 +51,8 @@ unsigned char *ks_translate(KStream *stream, unsigned char *input, int input_len
     return output;
 }
 
-void ks_destroy(KStream *stream) {
-    free(stream->s);
-    free(stream);
-}
 
+/// Creates a new stream based off of the given key
 KStream *ks_create(unsigned char *key, int key_len) {
     KStream *stream = (KStream *)malloc(sizeof(KStream));
     int *s = (int *)malloc(sizeof(int) * S_SIZE);
@@ -72,4 +78,10 @@ KStream *ks_create(unsigned char *key, int key_len) {
     }
 
     return stream;
+}
+
+/// Destroys a stream
+void ks_destroy(KStream *stream) {
+    free(stream->s);
+    free(stream);
 }
