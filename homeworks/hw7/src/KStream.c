@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include "KStream.h"
 
 #define S_SIZE 256 // some magic number in the kstream algorithm
 
@@ -9,6 +8,9 @@ typedef struct kStream {
     int j;
 } KStream;
 
+#define _K_STREAM_
+#include "KStream.h"
+
 unsigned char ks_next_byte(KStream *stream) {
     int i = stream->i;
     int j = stream->j;
@@ -17,8 +19,8 @@ unsigned char ks_next_byte(KStream *stream) {
     j = (j + stream->s[i]) % S_SIZE;
 
     unsigned char temp = stream->s[i];
-    stream->s[i] = j;
-    stream->s[j] = i;
+    stream->s[i] = stream->s[j];
+    stream->s[j] = temp;
 
     stream->i = i;
     stream->j = j;
@@ -37,7 +39,6 @@ unsigned char *ks_translate(KStream *stream, unsigned char *input, int input_len
         output[i] = ks_encode(stream, input[i]);
     }
 
-    free(input);
     return output;
 }
 
@@ -58,8 +59,8 @@ KStream *ks_create(unsigned char *key, int key_len) {
     for (int i = 0; i < S_SIZE; i++) {
         j = (j + s[i] + key[i % key_len]) % S_SIZE;
         int temp = s[i];
-        s[i] = j;
-        s[j] = i;
+        s[i] = s[j];
+        s[j] = temp;
     }
 
     stream->i = 0;
