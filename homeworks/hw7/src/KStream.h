@@ -1,3 +1,10 @@
+/**
+ * @file KStream.h
+ * @author Tom Schollenberger
+ * @brief Contains the function definitions for the KStream
+ * 
+ */
+
 #ifndef _K_STREAM_H_
 
 #ifndef _K_STREAM_

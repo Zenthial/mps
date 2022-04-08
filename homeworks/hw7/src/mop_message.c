@@ -1,4 +1,11 @@
-#define _GNU_SOURCE
+/**
+ * @file mop_message.c
+ * @author Tom Schollenberger
+ * @brief The main KStream tester
+ * 
+ */
+
+#define _DEFAULT_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,7 +84,7 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < input_buff.buffer_len; i++) {
         if (out[i] != '0') {
             if (stdout_bool == 1 && !isascii(out[i])) {
-                fprintf(out_file, "%2x", out[i]);
+                fprintf(out_file, "%x", out[i] & 0xff);
             }
             else {
                 fprintf(out_file, "%c", out[i]);

@@ -1,3 +1,10 @@
+/**
+ * @file KStream.c
+ * @author Tom Schollenberger
+ * @brief The KStream implementation file, containing both public and private functions
+ * 
+ */
+
 #include <stdlib.h>
 
 #define S_SIZE 256 // some magic number in the kstream algorithm
