@@ -6,4 +6,12 @@
 
 #include "board.h"
 
+/**
+ * @brief Solves a board
+ * 
+ * @param board Board pointer
+ * @param start Start point
+ * @param end End point
+ * @return int 
+ */
 int solve(Board *board, Point *start, Point end);

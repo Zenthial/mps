@@ -7,6 +7,7 @@
 
 #define SPCE "          "
 
+/// Function that prints out the help statement to stdout
 void print_help() {
     printf("Usage:\n");
     printf("mopsolver [-hdsp] [-i INFILE] [-o OUTFILE]\n");
@@ -19,12 +20,12 @@ void print_help() {
     printf("  -o outfile  Write all output to outfile.                    (Default: stdout)\n");
 }
 
-bool get_options(
+// fills the option pointers
+void get_options(
     bool *pretty_print_solution, bool *solution_print,
     bool *pretty_print_initial, FILE **in_file_pointer, FILE **out_file_pointer,
     int argc, char *argv[]
 ) {
-    bool return_val = true;
     char c;
     while ((c = getopt(argc, argv, "hdspi:o:")) != -1) {
         switch(c) {
@@ -51,6 +52,4 @@ bool get_options(
                 break;
         }
     }
-
-    return return_val;
 }

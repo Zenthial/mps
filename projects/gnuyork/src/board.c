@@ -7,6 +7,7 @@
 #define RED "\033[0;31m"
 #define WHT "\033[0;37m"
 
+// Creates a board
 Board *board_create(FILE *input) {
     int default_size = 5000;
     int num_elm_rows = 0;
@@ -48,6 +49,7 @@ Board *board_create(FILE *input) {
     return board;
 }
 
+// Gets all the neighbors of a given point
 QueueADT board_get_neighbors(Board *board, int r, int c) {
     int possible_neighbors[4][2] = {
         {r, c - 1}, {r, c + 1},
@@ -83,20 +85,24 @@ int linearized_2d_cords(int r, int c, int num_row_elms) {
     return (num_row_elms * c) + r;
 }
 
+// gets a char at a point
 char board_get(Board *board, int r, int c) {
     int index = linearized_2d_cords(r, c, board->row_elms);
     return board->arr[index];
 }
 
+// puts a char at a point
 void board_put(Board *board, int r, int c, char chr) {
     int index = linearized_2d_cords(r, c, board->row_elms);
     board->arr[index] = chr;
 }
 
+// sets the path at the given index
 void board_set_path(Board *board, int index) {
     board->arr[index] = '2';
 }
 
+// deletes a board pointer
 void board_delete(Board *board) {
     free(board->arr);
     free(board);
@@ -112,6 +118,7 @@ void print_details(int row_size, FILE *out_stream) {
     fprintf(out_stream, "|\n");
 }
 
+// prints out a board pointer to the given file
 void board_print(Board *board, FILE *out_stream) {
     int rows = board->indexes / board->columns;
     int row_counter = 0;

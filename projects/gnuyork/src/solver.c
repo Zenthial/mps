@@ -19,8 +19,16 @@ typedef struct _a_star_point {
     struct _a_star_point *parent;
 } AStarPoint;
 
+/**
+ * @brief A basic BFS algorithm implementation
+ * 
+ * @param board Board pointer
+ * @param start Start point
+ * @param end End point
+ * @return int The number of moves it took to solve
+ */
 int bfs(Board *board, Point *start, Point end) {
-QueueADT queue = que_create(NULL);
+    QueueADT queue = que_create(NULL);
     int *visited = (int *)calloc(board->size, sizeof(int));
     int *back_trace = (int *)malloc(board->size * sizeof(int));
     for (int i = 0; i < board->size; i++) {
@@ -167,6 +175,7 @@ int a_star(Board *board, Point *start, Point end) {
     return 0;
 }
 
+/// wrapper method for testing different solution algs
 int solve(Board *board, Point *start, Point end) {
     return bfs(board, start, end);
 }

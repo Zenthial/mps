@@ -7,6 +7,7 @@
 #include "options.h"
 #include "solver.h"
 
+// main program entry point
 int main(int argc, char *argv[]) {
     bool pretty_print_solution = false;
     bool solution_print = false;
