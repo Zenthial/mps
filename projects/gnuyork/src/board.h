@@ -1,3 +1,10 @@
+/**
+ * @file board.h
+ * @author Tom Schollenberger
+ * @brief Defines all board state function representations
+ * 
+ */
+
 #include <stdio.h>
 
 #include "QueueADT.h"

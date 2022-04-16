@@ -1,3 +1,10 @@
+/**
+ * @file board.c
+ * @author Tom Schollenberger
+ * @brief Handles all board state implementations
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

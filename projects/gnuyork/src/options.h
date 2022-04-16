@@ -1,3 +1,11 @@
+/**
+ * @file options.h
+ * @author Tom Schollenberger
+ * @brief Handles all command line options parsing
+ * 
+ */
+
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>

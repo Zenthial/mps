@@ -2,6 +2,7 @@
 // description:
 // implements both bfs and a* solving algos
 // author: Tom Schollenberger
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>

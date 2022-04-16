@@ -1,3 +1,10 @@
+/**
+ * @file mopsolver.c
+ * @author Tom Schollenberger
+ * @brief The main entrypoint of the mop solver file
+ * 
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
