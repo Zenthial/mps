@@ -1,0 +1,1 @@
+gcc -std=c99 -ggdb -Wall -Wextra src/pt_cruiser.c src/racer.c -o main -lcurses -pthread
