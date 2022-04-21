@@ -35,8 +35,6 @@ void init_racers( long milliseconds, int length ) {
  * @return char* The premade graphic
  */
 char *make_graphic(char *name, char * start) {
-    const char dash = '-';
-
     char *graphic = (char *)malloc(sizeof(char) * 13);
 
     int length = strlen(name);

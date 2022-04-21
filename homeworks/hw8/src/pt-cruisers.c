@@ -32,7 +32,7 @@ NumberReturn check_first_num(char *first_arg) {
         if (first_arg[i] == '-') {
             char *ptr;
             int ret = strtol(first_arg, &ptr, 10);
-            return_struct = (NumberReturn){2, ret};
+            return (NumberReturn){2, ret};
         } else if (!isdigit(first_arg[i])) {
             return (NumberReturn){0, 0};
         }
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     clear();                       // clear screen and send cursor to (0,0)
 
     // make sure that we have at least 3 args
-    if (argc < 3) {
+    if (argc < 2) {
         fprintf(stderr, USAGE);
         endwin();
         exit(EXIT_FAILURE);
