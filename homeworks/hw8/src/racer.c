@@ -43,7 +43,11 @@ void init_racers( long milliseconds, int length ) {
  * @return char* The premade graphic
  */
 char *make_graphic(char *name, char * start) {
-    char *graphic = (char *)malloc(sizeof(char) * 13);
+    char *graphic = (char *)malloc(sizeof(char) * 14);
+
+    for (int i = 0; i < 14; i++) {
+        graphic[i] = '\0';
+    }
 
     int length = strlen(name);
     int remaining = 7 - length;
@@ -115,13 +119,13 @@ void *run( void *racer ) {
         move(real_racer->row, 0);
         // refresh();
         // clear the row
-        clrtoeol();
+        // clrtoeol();
         // refresh();
 
         // move to the new position
         move(real_racer->row, real_racer->distance);
         // refresh();
-        printw("%s", real_racer->graphic);
+        printw(" %s\n", real_racer->graphic);
         // fflush(stdout);
         refresh();
 
