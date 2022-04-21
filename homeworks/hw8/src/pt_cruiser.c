@@ -27,20 +27,26 @@ typedef struct Number_T {
 NumberReturn check_first_num(char *first_arg) {
     NumberReturn return_struct;
 
-    if (!isdigit(first_arg[0]) && first_arg[0] != '-') {
-        return_struct = (NumberReturn) {0, 0};
-    } else if (first_arg[0] == '-') {
-        char *ptr;
-        int ret = strtol(first_arg, &ptr, 10);
-        return_struct = (NumberReturn) {2, ret}; 
-    } else {
+    int len = strlen(first_arg);
+    for (int i = 0; i < len; i++) {
+        if (first_arg[i] == '-') {
+            char *ptr;
+            int ret = strtol(first_arg, &ptr, 10);
+            return_struct = (NumberReturn){2, ret};
+        } else if (!isdigit(first_arg[i])) {
+            return (NumberReturn){0, 0};
+        }
+    }
+    
+    {
         char *ptr;
         int ret = strtol(first_arg, &ptr, 10);
 
         if (ret == 0) {
-            return_struct = (NumberReturn) {2, ret};
-        } else {
-            return_struct = (NumberReturn) {1, ret};
+            return_struct = (NumberReturn){2, ret};
+        }
+        else {
+            return_struct = (NumberReturn){1, ret};
         }
     }
 
@@ -93,7 +99,7 @@ int main(int argc, char *argv[]) {
         char *name = argv[t + offset];
 
         if (strlen(name) > MAX_NAME_LEN) {
-            fprintf(stderr, "Error: racer %s exceeds length limit of 6.", name);
+            fprintf(stderr, "Error: racer %s exceeds length limit of 6.\n", name);
             endwin();
             exit(EXIT_FAILURE);
         }
@@ -133,7 +139,8 @@ int main(int argc, char *argv[]) {
 
     move(0, 0);
     refresh();
-    printf("The race is over! Press any key to exit the racetrack.");
+    printw("The race is over! Press any key to exit the racetrack.");
+    refresh();
     getchar();
 
     endwin();

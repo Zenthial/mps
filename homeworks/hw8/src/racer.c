@@ -98,16 +98,18 @@ void *run( void *racer ) {
         
         // move to the start of the row
         move(real_racer->row, 0);
-        refresh();
+        // refresh();
         // clear the row
         clrtoeol();
-        refresh();
+        // refresh();
+
         // move to the new position
         move(real_racer->row, real_racer->distance);
-        refresh();
+        // refresh();
         // print out the new graphic
-        printf("%s", real_racer->graphic);
-        fflush(stdout);
+        printw("%s", real_racer->graphic);
+        // fflush(stdout);
+        refresh();
 
         // give back access
         pthread_mutex_unlock(&curses_mutex);
