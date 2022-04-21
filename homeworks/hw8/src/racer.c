@@ -38,31 +38,38 @@ char *make_graphic(char *name, char * start) {
     const char dash = '-';
 
     char *graphic = (char *)malloc(sizeof(char) * 13);
+
     int length = strlen(name);
     int remaining = 7 - length;
 
-    graphic = strcat(graphic, start);
+    int start_len = strlen(start);
+
+    for (int i = 0; i < start_len; i++) {
+        graphic[i] = start[i];
+    }
 
     for (int i = 0; i < length; i++) {
-        graphic = strncat(graphic, &name[i], 1);
+        graphic[start_len + i] = name[i];
     }
 
     for (int i = 0; i < remaining; i++) {
-        graphic = strncat(graphic, &dash, 1);
+        graphic[i + length + start_len] = '-';
     }
 
-    graphic = strcat(graphic, END);
+    for (int i = 0; i < start_len; i++) {
+        graphic[i + remaining + length + start_len] = END[i];
+    }
 
     return graphic;
 }
 
 Racer * make_racer( char *name, int row ) {
-    Racer *racer = (Racer *)malloc(sizeof(Racer *));
+    Racer *racer = (Racer *)malloc(sizeof(Racer));
     racer->row = row;
     racer->distance = 0;
 
-    char *graphic = make_graphic(name, START);
-    racer->graphic = graphic;
+    char *graphic_text = make_graphic(name, START);
+    racer->graphic = graphic_text;
 
     return racer;
 }
