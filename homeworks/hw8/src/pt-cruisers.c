@@ -70,7 +70,6 @@ int main(int argc, char *argv[]) {
     // make sure that we have at least 3 args
     if (argc < 2) {
         fprintf(stderr, USAGE);
-        endwin();
         exit(EXIT_FAILURE);
     }
 
@@ -86,13 +85,11 @@ int main(int argc, char *argv[]) {
         offset++;
     } else if(return_struct.is_number == 2) {
         fprintf(stderr, "Error: delay (%s) is invalid.\n", argv[1]);
-        endwin();
         exit(EXIT_FAILURE);
     }
 
     if (num_names < 2) {
         fprintf(stderr, USAGE);
-        endwin();
         exit(EXIT_FAILURE);
     }
 
@@ -150,7 +147,6 @@ int main(int argc, char *argv[]) {
     free(racer_pool);
 
     move(0, 0);
-    refresh();
     printw("The race is over! Press any key to exit the racetrack");
     refresh();
     getchar();
