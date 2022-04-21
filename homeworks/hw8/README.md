@@ -1,0 +1,1 @@
+This only compiles on linux due to the dependency of curses, pthreads, unistd and probably something else i'm forgetting
