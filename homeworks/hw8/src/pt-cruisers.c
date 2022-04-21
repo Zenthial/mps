@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
 
     move(0, 0);
     refresh();
-    printw("The race is over! Press any key to exit the racetrack\n");
+    printw("The race is over! Press any key to exit the racetrack");
     refresh();
     getchar();
 
