@@ -9,24 +9,42 @@
 #include <string.h>
 #include <curses.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "racer.h"
 
 #define USAGE "Usage: pt-cruisers [max-speed-delay] name1 name2 [name3...]\n"
 
+typedef struct Number_T {
+    int is_number; // 0 for not a number, 1 for a number, 2 for negative
+    int val;
+} NumberReturn;
+
 // To build: gcc -std=c99 -ggdb -Wall -Wextra demo_curses.c -o demo -lcurses
 // you can use -lcurses or -lncurses
 //
 
-int check_first_num(char *first_arg) {
-    char *ptr;
-    int ret = strtol(first_arg, &ptr, 10);
+NumberReturn check_first_num(char *first_arg) {
+    NumberReturn return_struct;
 
-    if (ret <= 0) {
-        return -1;
+    if (!isdigit(first_arg[0]) && first_arg[0] != '-') {
+        return_struct = (NumberReturn) {0, 0};
+    } else if (first_arg[0] == '-') {
+        char *ptr;
+        int ret = strtol(first_arg, &ptr, 10);
+        return_struct = (NumberReturn) {2, ret}; 
     } else {
-        return ret;
+        char *ptr;
+        int ret = strtol(first_arg, &ptr, 10);
+
+        if (ret == 0) {
+            return_struct = (NumberReturn) {2, ret};
+        } else {
+            return_struct = (NumberReturn) {1, ret};
+        }
     }
+
+    return return_struct;
 }
 
 int main(int argc, char *argv[]) {
@@ -44,15 +62,19 @@ int main(int argc, char *argv[]) {
     }
 
     // define some temporary variables allowing us to manuever a bit
-    int first_arg = check_first_num(argv[1]);
+    NumberReturn return_struct = check_first_num(argv[1]);
     int delay = DEFAULT_WAIT;
     int num_names = argc - 1;
     int offset = 1;
 
-    if (first_arg != -1) {
-        delay = first_arg;
+    if (return_struct.is_number == 1) {
+        delay = return_struct.val;
         num_names--;
         offset++;
+    } else if(return_struct.is_number == 2) {
+        fprintf(stderr, "Error: delay (%s) is invalid.\n", argv[1]);
+        endwin();
+        exit(EXIT_FAILURE);
     }
 
     // initialize racers here
