@@ -1,10 +1,16 @@
+/**
+ * @file pt-cruisers.c
+ * @author Thomas Schollenberger
+ * @brief Main file, handles command parsing and thread initialization
+ * 
+ */
+
 #define _DEFAULT_SOURCE
 
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
 #include <assert.h>
 #include <string.h>
 #include <curses.h>
@@ -17,13 +23,19 @@
 
 typedef struct Number_T {
     int is_number; // 0 for not a number, 1 for a number, 2 for negative
-    int val;
+    int val; // the value, unused in all cases except 1
 } NumberReturn;
 
 // To build: gcc -std=c99 -ggdb -Wall -Wextra demo_curses.c -o demo -lcurses
 // you can use -lcurses or -lncurses
 //
 
+/**
+ * @brief Checks if the first number is a string, negative or a number
+ * 
+ * @param first_arg The string to check
+ * @return NumberReturn 
+ */
 NumberReturn check_first_num(char *first_arg) {
     NumberReturn return_struct;
 
@@ -53,6 +65,7 @@ NumberReturn check_first_num(char *first_arg) {
     return return_struct;
 }
 
+// main entry point
 int main(int argc, char *argv[]) {
     initscr();               // initialize curses window
     cbreak();                      // set no waiting for Enter key
@@ -108,7 +121,6 @@ int main(int argc, char *argv[]) {
         racer_pool[t] = racer;
 
         int rc = pthread_create(&thread_pool[t], NULL, run, (void *)racer);
-        // printf("created thread %d\n", t);
 
         if (rc) {
             fprintf(stderr, "pthread_create failed");

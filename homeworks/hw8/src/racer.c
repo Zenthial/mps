@@ -1,3 +1,10 @@
+/**
+ * @file racer.c
+ * @author Thomas Schollenberger
+ * @brief The implementation file for the racer
+ * Handles all things related to displaying the racer
+ * 
+ */
 
 #define _DEFAULT_SOURCE     // for usleep
 
@@ -21,6 +28,7 @@ static int MAX_DELAY = DEFAULT_WAIT;
 
 pthread_mutex_t curses_mutex = PTHREAD_MUTEX_INITIALIZER;
 
+// inits the racer
 void init_racers( long milliseconds, int length ) {
     MAX_DELAY = milliseconds;
     FINISH_LINE = (length - MAX_CAR_LEN - 2);
@@ -61,6 +69,7 @@ char *make_graphic(char *name, char * start) {
     return graphic;
 }
 
+// creates a racer
 Racer * make_racer( char *name, int row ) {
     Racer *racer = (Racer *)malloc(sizeof(Racer));
     racer->row = row;
@@ -72,11 +81,13 @@ Racer * make_racer( char *name, int row ) {
     return racer;
 }
 
+// cleanup function
 void destroy_racer( Racer *racer ) {
     free(racer->graphic);
     free(racer);
 }
 
+// thread function
 void *run( void *racer ) {
     Racer *real_racer = (Racer *)racer;
     int active = 1;
@@ -89,7 +100,6 @@ void *run( void *racer ) {
             active = 0;
             real_racer->graphic[1] = FLAT_TIRE;
         } else {
-            // printf("sleeping for %d", sleep_val);
             usleep(sleep_val);
             real_racer->distance++;
         }
@@ -111,7 +121,6 @@ void *run( void *racer ) {
         // move to the new position
         move(real_racer->row, real_racer->distance);
         // refresh();
-        // print out the new graphic
         printw("%s", real_racer->graphic);
         // fflush(stdout);
         refresh();
