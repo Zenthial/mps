@@ -67,12 +67,6 @@ NumberReturn check_first_num(char *first_arg) {
 
 // main entry point
 int main(int argc, char *argv[]) {
-    initscr();               // initialize curses window
-    cbreak();                      // set no waiting for Enter key
-    noecho();                      // set no echoing of user input
-    int width = getmaxx(stdscr);
-    clear();                       // clear screen and send cursor to (0,0)
-
     // make sure that we have at least 3 args
     if (argc < 2) {
         fprintf(stderr, USAGE);
@@ -96,14 +90,20 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // initialize racers here
-    init_racers(delay, width);
-
     if (num_names < 2) {
         fprintf(stderr, USAGE);
         endwin();
         exit(EXIT_FAILURE);
     }
+
+    initscr();               // initialize curses window
+    cbreak();                      // set no waiting for Enter key
+    noecho();                      // set no echoing of user input
+    int width = getmaxx(stdscr);
+    clear();                       // clear screen and send cursor to (0,0)
+
+    // initialize racers here
+    init_racers(delay, width);
 
     pthread_t *thread_pool = (pthread_t *)malloc(sizeof(pthread_t) * num_names);
     Racer **racer_pool = (Racer **)malloc(sizeof(Racer *) * num_names);
