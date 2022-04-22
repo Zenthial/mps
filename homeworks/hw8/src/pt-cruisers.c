@@ -93,11 +93,11 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    initscr();               // initialize curses window
-    cbreak();                      // set no waiting for Enter key
-    noecho();                      // set no echoing of user input
+    initscr();
+    cbreak();
+    noecho();
     int width = getmaxx(stdscr);
-    clear();                       // clear screen and send cursor to (0,0)
+    clear(); 
 
     // initialize racers here
     init_racers(delay, width);
