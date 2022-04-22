@@ -29,7 +29,7 @@ static int MAX_DELAY = DEFAULT_WAIT;
 pthread_mutex_t curses_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // inits the racer
-void init_racers( long milliseconds, int length ) {
+void init_racers(long milliseconds, int length) {
     MAX_DELAY = milliseconds;
     FINISH_LINE = (length - MAX_CAR_LEN - 2);
     srand(time(NULL));
@@ -42,7 +42,7 @@ void init_racers( long milliseconds, int length ) {
  * @param start What should be at the head of the car
  * @return char* The premade graphic
  */
-char *make_graphic(char *name, char * start) {
+char *make_graphic(char *name, char *start) {
     char *graphic = (char *)malloc(sizeof(char) * 14);
 
     for (int i = 0; i < 14; i++) {
@@ -74,7 +74,7 @@ char *make_graphic(char *name, char * start) {
 }
 
 // creates a racer
-Racer * make_racer( char *name, int row ) {
+Racer *make_racer(char *name, int row) {
     Racer *racer = (Racer *)malloc(sizeof(Racer));
     racer->row = row;
     racer->distance = 0;
@@ -86,13 +86,13 @@ Racer * make_racer( char *name, int row ) {
 }
 
 // cleanup function
-void destroy_racer( Racer *racer ) {
+void destroy_racer(Racer *racer) {
     free(racer->graphic);
     free(racer);
 }
 
 // thread function
-void *run( void *racer ) {
+void *run(void *racer) {
     Racer *real_racer = (Racer *)racer;
     int active = 1;
 
